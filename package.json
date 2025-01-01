@@ -1,0 +1,24 @@
+{
+  "name": "budgetapp",
+  "version": "1.0.0",
+  "decription": "A first test of the app using the Paild Api for accessing accounts",
+  "main": "index.js",
+  "scripts": {
+    "start":"node dist/server.js", 
+    "build":"tsc",
+    "dev": "tsc watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/express-session": "^1.18.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "plaid": "^30.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
