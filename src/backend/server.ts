@@ -50,11 +50,15 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
 
+// Serve static files from the "frontend" folder
+app.use(express.static(path.join(__dirname, '../frontend')));
+
 //Create Homepage 
 app.get("/", async (_: Request, res: Response) => {
   const filepath = path.join(__dirname, "../frontend/index.html");
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
+
 
 //!Server route to get the link token from the Plaid Service and return to the client
 app.get("/init/create_link_token", 

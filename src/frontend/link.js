@@ -8,48 +8,46 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-(($) => __awaiter(void 0, void 0, void 0, function* () {
-    const createLinkToken = () => __awaiter(void 0, void 0, void 0, function* () {
-        const respone = yield fetch("/api/init/create_link_token");
-        const data = yield respone.json();
-    });
-    //Initialize Link
-    const handler = Plaid.create({
-        token: yield createLinkToken(),
-        onSuccess: (publicToken, metadata) => __awaiter(void 0, void 0, void 0, function* () {
-            yield fetch("/api/exchange_public_token", {
-                method: "POST",
-                body: JSON.stringify({ public_token: publicToken }),
-                headers: {
-                    "Content-Type": "application/json",
+//Untility Class
+class PlaidClient {
+    //! must includes methods
+    //Method to create a link token
+    static createLink() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const res = yield fetch("/init/create_link_token");
+            const data = yield res.json();
+            console.log(data);
+            //Save to local storage
+            const linkToken = data.link_token;
+            console.log(linkToken);
+            localStorage.setItem("link_token", linkToken);
+            return linkToken; //Return a promise or a string
+        });
+    }
+    //Method to create the Plaid handler (manages the connection between your app and a user's financial institution)
+    static initHandler(linkToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return Plaid.create({
+                token: linkToken,
+                onSuccess: (token, metadata) => {
+                    console.log(`Public Token: ${token}`);
+                    console.log(`Meta Data: ${metadata}`);
+                },
+                onExit: (err, metadata) => {
+                    console.log("Exit Event: ", err, metadata);
                 },
             });
-            yield getBalance();
-        }),
-        onEvent: (eventName, metadata) => {
-            console.log("Event:", eventName);
-            console.log("Metadata:", metadata);
-        },
-        onExit: (error, metadata) => {
-            console.log(error, metadata);
-        },
-    });
-    //Start Link when button is clicked 
-    const linkAccountButton = document.getElementById("link-acount");
-    linkAccountButton === null || linkAccountButton === void 0 ? void 0 : linkAccountButton.addEventListener("click", (event) => {
-        handler.open();
-    });
-}))();
-// Retrieves balance information
-const getBalance = function () {
-    return __awaiter(this, void 0, void 0, function* () {
-        const res = yield fetch("/api/data", {
-            method: "GET",
         });
-        const data = yield res.json();
-        //Render response data 
-        const pre = document.getElementById("response");
-        pre.textContent = JSON.stringify(data, null, 2);
-        pre.style.background = "#F6F6F6";
-    });
-};
+    }
+}
+(() => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const linkToken = yield PlaidClient.createLink();
+        console.log(linkToken);
+        const handler = yield PlaidClient.initHandler(linkToken);
+        handler.open();
+    }
+    catch (error) {
+        console.error("Error initializing Plaid handler:", error);
+    }
+}))();

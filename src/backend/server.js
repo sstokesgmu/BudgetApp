@@ -48,11 +48,11 @@ const client = new plaid_1.PlaidApi(configuration);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+// Serve static files from the "frontend" folder
+app.use(express_1.default.static(path_1.default.join(__dirname, '../frontend')));
 //Create Homepage 
 app.get("/", (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     const filepath = path_1.default.join(__dirname, "../frontend/index.html");
-    console.log(__dirname);
-    console.log(filepath);
     res.sendFile(path_1.default.join(__dirname, "../frontend/index.html"));
 }));
 //!Server route to get the link token from the Plaid Service and return to the client
@@ -74,12 +74,6 @@ app.get("/init/create_link_token", (req, res, next) => __awaiter(void 0, void 0,
         next(error);
     }
 }));
-// app.get("/api/is_account_connected", 
-//     async (req: Request, res: Response, next: NextFunction) => {
-//         try {
-//             return req.session.access_token ? 
-//         }
-//     });
 // Checks whether the user's account is connected, called
 // in index.html when redirected from oauth.html
 app.get("/init/is_account_connected", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
