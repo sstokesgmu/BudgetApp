@@ -75,14 +75,6 @@ app.get("/init/create_link_token",
             next(error);
         }
     });
-// app.get("/api/is_account_connected", 
-//     async (req: Request, res: Response, next: NextFunction) => {
-//         try {
-//             return req.session.access_token ? 
-//         }
-//     });
-
-
 // Checks whether the user's account is connected, called
 // in index.html when redirected from oauth.html
 app.get("/init/is_account_connected", async (req:Request, res:Response, next:NextFunction) => {
