@@ -97,7 +97,7 @@ app.post("/init/exchange_public_token",
         try {
             const exchangeRes = await client.itemPublicTokenExchange({public_token:req.body.public_token});
             const accessToken = exchangeRes.data.access_token;
-
+            console.log(accessToken);
             //TODO: Store access token in DB instead of session storage
             req.session.access_token = req.session.access_token ?? "";
             res.json(true); 
