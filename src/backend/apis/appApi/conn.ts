@@ -1,21 +1,34 @@
-import {MongoClient} from "mongodb";
 import dotenv from "dotenv";
+const mongoose = require("mongoose");
 
 dotenv.config();
-//Replace the placeholder with your Atlas connection string
-const uri = process.env.MONGO_URI || "";
-const client = new MongoClient(uri);
-async function run (){
-    try {
-        //Connect the client to the server 
-        await client.connect();
-        //Send a ping to confirm that a successful connection
-        await client.db("sample_bank").command({ping:1});
-        console.log("Pinged your development. You successfully connected to MongoDB");
-    } catch (error) {
-        console.error("Failed to connect to MongoDB:", error);
+
+async function run () {
+    try {  
+        mongoose.connect(process.env.MONGO_URI,{
+            dbname: "sample_bank"
+        }
+        );
+        mongoose.connection.once("open", () => {
+            console.log("connected to mongodb");
+        })
+    } catch(error) {
+        console.error("Something went wrong when connecting to the database", error);
     }
 }
 
 module.exports = run;
+
+
+
+
+
+
+
+
+
+
+
+
+
 

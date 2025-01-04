@@ -12,24 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongodb_1 = require("mongodb");
 const dotenv_1 = __importDefault(require("dotenv"));
+const mongoose = require("mongoose");
 dotenv_1.default.config();
-//Replace the placeholder with your Atlas connection string
-console.log(process.env.MONGO_URI);
-const uri = process.env.MONGO_URI || "";
-const client = new mongodb_1.MongoClient(uri);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            //Connect the client to the server 
-            yield client.connect();
-            //Send a ping to confirm that a successful connection
-            yield client.db("sample_bank").command({ ping: 1 });
-            console.log("Pinged your development. You successfully connected to MongoDB");
+            const db = yield mongoose.connect(process.env.MONGO_URI, {
+                dbname: "sample_bank"
+            });
+            console.log(db);
+            mongoose.connection.once("open", () => {
+                console.log("connected to mongodb");
+            });
         }
         catch (error) {
-            console.error("Failed to connect to MongoDB:", error);
+            console.error("Something went wrong when connecting to the database", error);
         }
     });
 }
