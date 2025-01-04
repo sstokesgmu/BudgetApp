@@ -1,8 +1,4 @@
 //Untility Class
-
-
-
-
 class PlaidClient {
     //! must includes methods
     //Method to create a link token
