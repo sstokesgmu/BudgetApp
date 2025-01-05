@@ -2,13 +2,14 @@ import express,{Request,Response,Application,NextFunction} from "express";
 import dotenv from "dotenv";
 import session from "express-session";
 import path from "path";
+import connectDB from "./db.js";
+const accountRoutes = require("./apis/appApi/routes/accounts.js")
 
-const connectToDB = require("./apis/appApi/conn.js");
-connectToDB();
+connectDB();
 
 dotenv.config();
 const app:Application = express();
-const port:Number = 8080;
+const PORT:Number = 8080;
 
 declare module "express-session" {
     interface SessionData {
@@ -19,13 +20,14 @@ declare module "express-session" {
 //Server static files form the "frontend" folder
 app.use(express.static(path.join(__dirname, '../frontend')));
 
+app.use("/api",accountRoutes);
+
+//Create the homepage
 app.get("/", async (_:Request, res:Response) => {
     res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
-
-
-app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running at http://localhost:${PORT}`);
 });
 
