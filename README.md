@@ -3,7 +3,7 @@
 - [X] Deprecate the index.html file and make a ts to handle server interaction
 - [X] **New Goal id: 1** Create a Database with basic (John Doe) account information 
 - [X] Completed refactoring from updateProStruct branch
-- [ ] Connect server to database with mongooose
+- [X] Connect server to database with mongooose
 - [ ] Create routes and handlers for get, post, and put for dataset
 - [ ] On the frontend create a html page to show
      - name of account holder
