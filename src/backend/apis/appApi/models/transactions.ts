@@ -5,6 +5,7 @@ interface Transaction {
     amount: number,
     trans_type: string,
     comp_name: string,
+    status: string,
 }
 
 //Create a sub-schema 
@@ -13,6 +14,7 @@ const transactionSchema = new Schema<Transaction>({
     amount: {type:Number,required:true},
     trans_type: {type:String, required:true},
     comp_name: {type:String, required:true},
+    status: {type:String, required:true},
 })
 
 interface ITransaction_Bucket extends Document {

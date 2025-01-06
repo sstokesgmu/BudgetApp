@@ -1,4 +1,4 @@
-import mongoose, {Model, Schema, model} from "mongoose";
+import mongoose, {Model, Schema} from "mongoose";
 
 // Create an interface representing a document in MongoDB
 interface IAccount {

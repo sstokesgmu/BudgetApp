@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import session from "express-session";
 import path from "path";
 import connectDB from "./db.js";
-const accountRoutes = require("./apis/appApi/routes/accounts.js")
+const accountRoutes = require("./apis/appApi/routes/accountRoutes.js");
+const userRoutes = require("./apis/appApi/routes/userRoutes.js");
 
 connectDB();
 
@@ -20,7 +21,8 @@ declare module "express-session" {
 //Server static files form the "frontend" folder
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-app.use("/api",accountRoutes);
+app.use(accountRoutes);
+app.use(userRoutes);
 
 //Create the homepage
 app.get("/", async (_:Request, res:Response) => {
