@@ -5,13 +5,12 @@
 - [X] Completed refactoring from updateProStruct branch
 - [X] Connect server to database with mongooose
 - [ ] Create routes and handlers for get, post, and put for dataset
-- [ ] On the frontend create a html page to show
+- [X] On the frontend create a html page to show
      - name of account holder
      - starting and current balance 
      - account #
-     - 5 transactions
 - [ ] Add a data to the transaction collection in the database
-- [ ] Config server, db, and project to work for testers
+- [X] Config server, db, and project to work for testers
 
 
 ## Possibilities
