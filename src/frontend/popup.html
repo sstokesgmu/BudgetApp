@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pop Up</title>
+</head>
+<body>
+    <div>
+        <form method="POST" action="">
+            <h1>Enter Transaction Information</h1>
+
+            <label for="company"><b>Company</b></label>
+            <input type="Text"  name="company" placeholder="What company was the transaction from" required>
+
+            <label for="amount"><b>Amount</b></label>
+            <input type="number" name="amount" placeholder ="Enter amount" required>
+        
+            <label for="account"><b>Apply to Which account</b></label>
+            <select name="account" required>
+                <option value="123">Account: 123 </option>
+                <option value="456">Account: 456</option>
+                <option value="789">Account: 789</option>
+            </select>
+
+            <label for="account"><b>Apply to Which account</b></label>
+            <select name="account" required>
+                <option value="deposit">Deposit</option>
+                <option value="withdrawl">Withdrawl</option>
+            </select>
+
+            <button type="submit" class="btn">Submit</button>
+            <button type="button" class="btn cancel">Cancel</button>
+        </form>
+    </div>
+</body>
+</html>

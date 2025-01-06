@@ -1,20 +1,14 @@
 import mongoose, {Schema, model, Document} from "mongoose";
-
-interface Transaction {
-    date: Date,
-    amount: number,
-    trans_type: string,
-    comp_name: string,
-    status: string,
-}
+import {ITransaction} from "../../../../shared/interfaces/transactions";
 
 //Create a sub-schema 
-const transactionSchema = new Schema<Transaction>({
+const transactionSchema = new Schema<ITransaction>({
     date: {type:Date,required:true},
     amount: {type:Number,required:true},
     trans_type: {type:String, required:true},
     comp_name: {type:String, required:true},
     status: {type:String, required:true},
+    account: {type:Number, required:true},
 })
 
 interface ITransaction_Bucket extends Document {
@@ -22,7 +16,7 @@ interface ITransaction_Bucket extends Document {
     transaction_count: number,
     bucket_start_date: Date,
     bucket_end_date: Date | null,
-    transactions: Transaction[];
+    transactions: ITransaction[];
 }
 
 const bucketSchema = new Schema<ITransaction_Bucket>({
@@ -33,6 +27,6 @@ const bucketSchema = new Schema<ITransaction_Bucket>({
     transactions: {type: [transactionSchema], required: true}
 });
 
-const BucketModel = model<ITransaction_Bucket>("TransactionBucket", bucketSchema);
+const BucketModel = model<ITransaction_Bucket>("TransactionBucket", bucketSchema, "transaction_bucket");
 
 export default BucketModel;

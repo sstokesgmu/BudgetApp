@@ -1,3 +1,6 @@
+import {ITransaction} from "../../shared/interfaces/transactions";
+
+
 const titleCard:Element = document.getElementsByTagName("h1")[0];
 const accountTitle: Element = document.getElementsByTagName("h2")[0];
 const accountType: HTMLElement | null = document.getElementById("account_type");
@@ -10,7 +13,6 @@ const accountSelect: HTMLSelectElement | null = document.getElementById("account
     modifyHTMLText(result[0]?.name, titleCard);
     result  = await fetch("/api/accounts").then(res => res.json()); 
     SetAccountInfo(result);
-
 
     accountSelect?.addEventListener("change", async () => {
         result = await fetch("/api/accounts").then(res => res.json());
@@ -38,5 +40,5 @@ function SetAccountInfo(result:any):void {
     modifyHTMLText(`${account?.type}`, accountType?.querySelector("p"));
     //result successfully returns the accounts //TODO: Populate into a selectable drop down
     modifyHTMLText(account?.current_amount, balanceEl);
-
 }
+
