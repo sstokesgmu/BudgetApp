@@ -73,6 +73,7 @@
     const openPopupButton = document.querySelector('.open-popup');
     const popupOverlay = document.getElementById('popupOverlay');
     const cancelButton = document.querySelector('.cancel'); // Update this to match the correct class
+    const accountSelect = document.getElementById("accountSelect");
   
     // Open the popup
     openPopupButton.addEventListener('click', () => {
@@ -113,6 +114,7 @@
         },
         body: JSON.stringify(formData), // Send JSON string
       });
+      await fetch(`api/accounts/balance/${accountSelect.value}`);
 
       // Trigger the "change" event on the dropdown
     if (accountSelect) {

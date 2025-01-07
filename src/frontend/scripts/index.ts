@@ -3,8 +3,9 @@
 
 const titleCard:Element = document.getElementsByTagName("h1")[0];
 const accountTitle: Element = document.getElementsByTagName("h2")[0];
-const accountType: HTMLElement | null = document.getElementById("account_type");
-const balanceEl: HTMLElement | null = document.getElementById("balance");
+const accountType:any = document.getElementById("account_type");
+const balanceEl: any = document.getElementById("balance");
+//const accountSelect: Element = document.getElementById("accountSelect");
 
 //On initalization select the first user with the Database //!for now
 (async () => {
