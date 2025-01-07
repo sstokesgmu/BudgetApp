@@ -14,14 +14,14 @@ router.get("/", async (req: Request,res: Response) => {
     }
 });
 
-router.patch("/balance/:accountId", async (req: Request, res:Response) => {
-    const account = await AccountModel.findOne({"account_id" : req.params.accountId});
-    const appliedBucket = await BucketModel.find({"account_id" : req.params.accountId});
+// router.patch("/balance/:accountId", async (req: Request, res:Response) => {
+//     const account = await AccountModel.findOne({"account_id" : req.params.accountId});
+//     const appliedBucket = await BucketModel.find({"account_id" : req.params.accountId});
     
-    res.send({
-        account,
-        appliedBucket
-    });
+//     res.send({
+//         account,
+//         appliedBucket
+//     });
 }); 
 
 module.exports = router;
