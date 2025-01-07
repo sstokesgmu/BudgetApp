@@ -7,11 +7,11 @@
 </head>
 <body>
     <div>
-        <form method="POST" action="">
+        <form>
             <h1>Enter Transaction Information</h1>
 
             <label for="company"><b>Company</b></label>
-            <input type="Text"  name="company" placeholder="What company was the transaction from" required>
+            <input type="text"  name="company" placeholder="What company was the transaction from" required>
 
             <label for="amount"><b>Amount</b></label>
             <input type="number" name="amount" placeholder ="Enter amount" required>
@@ -23,8 +23,8 @@
                 <option value="789">Account: 789</option>
             </select>
 
-            <label for="account"><b>Apply to Which account</b></label>
-            <select name="account" required>
+            <label for="type"><b>Deposit or Withdrawl</b></label>
+            <select name="type" required>
                 <option value="deposit">Deposit</option>
                 <option value="withdrawl">Withdrawl</option>
             </select>
@@ -34,4 +34,28 @@
         </form>
     </div>
 </body>
+<script> 
+    const form = document.getElementsByTagName("form")[0];
+    form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const formData = {
+        amount: form.elements["amount"].value,
+        company: form.elements["company"].value,
+        account: form.elements["account"].value,
+        type: form.elements["type"].value
+    };
+    console.log(formData);
+
+    await fetch("/api/transactions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json", // Correct header for JSON
+        },
+        body: JSON.stringify(formData), // Send JSON string
+    });
+});
+
+
+</script>
 </html>

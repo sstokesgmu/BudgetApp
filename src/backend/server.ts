@@ -21,7 +21,7 @@ declare module "express-session" {
 }
 
 //Server static files form the "frontend" folder
-app.use(express.static(path.join(__dirname, "../frontend")));
+//app.use(express.static(path.join(__dirname, "../frontend")));
 app.use(express.json());
 
 app.use("/api/accounts", accountRoutes);
@@ -29,9 +29,12 @@ app.use("/api/users", userRoutes);
 app.use("/api/transactions", trans_Routes);
 
 //Create the homepage
+app.use(express.static(path.join(__dirname, "../frontend")));
 app.get("/", async (_: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
