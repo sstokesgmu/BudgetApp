@@ -1,30 +1,140 @@
+/* Existing Styles */
 body {
-    font-family: Arial, sans-serif;
-  }
-  
-  #link-account {
-    border: 1px solid black;
-    border-radius: 5px;
-    background: black;
-    height: 48px;
-    width: 155px;
-    margin-top: 5px;
-    margin-left: 10px;
-    color: white;
-    font-size: 18px;
-  }
-  
-  #response {
-    top: 60px;
-    margin-left: 10px;
-    bottom: 0;
-    position: fixed;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    font-size: 14px;
-    background: #F6F6F6;
-  }
-  
-  table, th, td {
-    border:1px solid black;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 500px;
+  text-align: center;
+}
+.card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #ccc;
+  display: block;
+  margin: 0 auto 10px auto;
+}
+.card h1 {
+  font-size: 1.5em;
+  margin: 10px 0;
+}
+.card h2 {
+  font-size: 1em;
+  color: #555;
+  margin: 5px 0;
+}
+.card p {
+  font-size: 0.9em;
+  color: #888;
+}
+.card button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 15px;
+}
+.card button:hover {
+  background-color: #0056b3;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f0f0f0;
+}
+
+/* Popup Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Popup Card */
+.popup-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popup-card h1 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.popup-card form label {
+  display: block;
+  font-weight: bold;
+  margin: 10px 0 5px;
+  text-align: left;
+}
+
+.popup-card form input,
+.popup-card form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.popup-card form button {
+  padding: 10px 15px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.popup-card .btn {
+  background-color: #007BFF;
+  color: white;
+}
+
+.popup-card .btn:hover {
+  background-color: #0056b3;
+}
+
+.popup-card .cancel {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.popup-card .cancel:hover {
+  background-color: #d43f3f;
+}
+

@@ -5,7 +5,6 @@ const titleCard:Element = document.getElementsByTagName("h1")[0];
 const accountTitle: Element = document.getElementsByTagName("h2")[0];
 const accountType: HTMLElement | null = document.getElementById("account_type");
 const balanceEl: HTMLElement | null = document.getElementById("balance");
-const accountSelect: any = document.getElementById("accountSelect"); 
 
 //On initalization select the first user with the Database //!for now
 (async () => {
@@ -45,7 +44,7 @@ function SetAccountInfo(result:any):number {
     modifyHTMLText(`Account: ${account?.account_id}`, accountTitle);
     modifyHTMLText(`${account?.type}`, accountType?.querySelector("p"));
     //result successfully returns the accounts //TODO: Populate into a selectable drop down
-    modifyHTMLText(account?.current_amount, balanceEl);
+    modifyHTMLText(`$${account?.current_amount}`, balanceEl);
     return account?.account_id;
     
 }
@@ -101,3 +100,5 @@ function DeleteTable(){
         tableBody.lastChild?.remove();
     }
 }
+
+
