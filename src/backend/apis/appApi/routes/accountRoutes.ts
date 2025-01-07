@@ -22,6 +22,6 @@ router.get("/", async (req: Request,res: Response) => {
 //         account,
 //         appliedBucket
 //     });
-}); 
+// }); 
 
 module.exports = router;

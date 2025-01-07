@@ -27,7 +27,7 @@ npm install
 
 ```
 
-3. I create a user called "dev-01" that has database access and universal network access (IP: 0.0.0.0). Along with a Mongo URI that is ready to go. **Create a `.env` file and paste the Mongo URI inside.
+3. I create a user called "dev-01" that has database access and universal network access (IP: 0.0.0.0). Along with a Mongo URI that is ready to go, inside the `.enviro` file at the root directory. **Create a `.env` file and paste the Mongo URI inside.
 
 4. This project is written in TypeScript, so we need to compile ts files into js before we try to run the server. Don't worry about the TS type errors, I'm still trying to figure it out. Use this command:
 ```bash
