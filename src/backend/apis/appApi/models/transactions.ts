@@ -14,16 +14,16 @@ const transactionSchema = new Schema<ITransaction>({
 interface ITransaction_Bucket extends Document {
     account_id : number,
     transaction_count: number,
-    bucket_start_date: Date,
-    bucket_end_date: Date | null,
+    start_date: Date,
+    end_date: Date | null,
     transactions: ITransaction[];
 }
 
 const bucketSchema = new Schema<ITransaction_Bucket>({
     account_id : {type: Number, required:true},
     transaction_count: {type:Number,required:true},
-    bucket_start_date: {type: Date, required:true},
-    bucket_end_date: {type: Date, default:null},
+    start_date: {type: Date, required:true},
+    end_date: {type: Date, default:null},
     transactions: {type: [transactionSchema], required: true}
 });
 

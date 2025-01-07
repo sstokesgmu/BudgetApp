@@ -4,7 +4,7 @@ import UserModel from "../models/user";
 //create mini app
 const router = express.Router();
 
-router.get("/api/user", async ( _:Request , res:Response) => {
+router.get("/", async ( _:Request , res:Response) => {
     const user = await UserModel.find({});
     try {
         res.send(user);

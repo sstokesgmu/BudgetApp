@@ -5,7 +5,7 @@ const titleCard:Element = document.getElementsByTagName("h1")[0];
 const accountTitle: Element = document.getElementsByTagName("h2")[0];
 const accountType: HTMLElement | null = document.getElementById("account_type");
 const balanceEl: HTMLElement | null = document.getElementById("balance");
-const accountSelect: HTMLSelectElement | null = document.getElementById("accountSelect"); 
+const accountSelect: any = document.getElementById("accountSelect"); 
 
 //On initalization select the first user with the Database //!for now
 (async () => {
@@ -33,7 +33,7 @@ function SetAccountInfo(result:any):void {
             accountSelect.append(option);
         }
     }
-    let account:any = result.find((element) => element?.account_id == accountSelect?.value);
+    let account:any = result.find((element:any) => element?.account_id == accountSelect?.value);
  
     //Populate the html text and the select drop down
     modifyHTMLText(`Account: ${account?.account_id}`, accountTitle);

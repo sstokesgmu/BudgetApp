@@ -4,7 +4,7 @@ import AccountModel from "../models/account";
 //create the mini app 
 const router = express.Router();
 
-router.get("/api/accounts", async (req: Request,res: Response) => {
+router.get("/", async (req: Request,res: Response) => {
     const accounts = await AccountModel.find({});
     try {
         res.send(accounts);

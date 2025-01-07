@@ -9,6 +9,7 @@ const trans_Routes = require("./apis/appApi/routes/transactionRoutes.js");
 
 connectDB();
 
+
 dotenv.config();
 const app: Application = express();
 const PORT: Number = 8080;
@@ -21,10 +22,11 @@ declare module "express-session" {
 
 //Server static files form the "frontend" folder
 app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.json());
 
-app.use(accountRoutes);
-app.use(userRoutes);
-app.use(trans_Routes);
+app.use("/api/accounts", accountRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/transactions", trans_Routes);
 
 //Create the homepage
 app.get("/", async (_: Request, res: Response) => {
