@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import BucketModel from "../models/transactions";
-import { ITransaction } from "../../../../shared/interfaces/transactions";
+import BucketModel from "../models/transactions.js";
+import { ITransaction } from "../../../../shared/interfaces/budget.js";
 
 const router: any = express.Router();
 
@@ -83,5 +83,4 @@ function CreateModel(transaction:ITransaction):any {
   return bucket;
 }
 
-
-module.exports = router;
+export default router;

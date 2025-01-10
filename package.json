@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "decription": "A first test of the app using the Paild Api for accessing accounts",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "nodemon src/backend/server.js",
     "dev": "ts-node src/server.ts",

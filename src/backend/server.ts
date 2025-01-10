@@ -4,10 +4,18 @@ import session from "express-session";
 import path from "path";
 import ConnectToDB from "./db.js";
 
+//? https://stackoverflow.com/questions/64383909/dirname-is-not-defined-error-in-node-js-14-version
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 //BudgetMe Api routes middleware
-const accountRoutes = require("./apis/appApi/routes/accountRoutes.js");
-const userRoutes = require("./apis/appApi/routes/userRoutes.js");
-const trans_Routes = require("./apis/appApi/routes/transactionRoutes.js");
+import accountRoutes from "./apis/appApi/routes/accountRoutes.js";
+import userRoutes  from "./apis/appApi/routes/userRoutes.js";
+import trans_Routes from "./apis/appApi/routes/transactionRoutes.js";
+
 
 ConnectToDB(); 
 dotenv.config(); 

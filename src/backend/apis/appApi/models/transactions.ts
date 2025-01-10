@@ -1,5 +1,5 @@
-import mongoose, {Schema, model, Document} from "mongoose";
-import {ITransaction} from "../../../../shared/interfaces/transactions";
+import {Schema,Document, model as createModel} from "mongoose";
+import {ITransaction} from "../../../../shared/interfaces/budget.js";
 
 //Create a sub-schema 
 const transactionSchema = new Schema<ITransaction>({
@@ -11,6 +11,8 @@ const transactionSchema = new Schema<ITransaction>({
     account: {type:Number, required:true},
 })
 
+//Why do I have to extend here does it have to do with nested schemas because it needs 
+//__id and __v
 interface ITransaction_Bucket extends Document {
     account_id : number,
     transaction_count: number,
@@ -27,6 +29,5 @@ const bucketSchema = new Schema<ITransaction_Bucket>({
     transactions: {type: [transactionSchema], required: true}
 });
 
-const BucketModel = model<ITransaction_Bucket>("TransactionBucket", bucketSchema, "transaction_bucket");
-
+const BucketModel = createModel<ITransaction_Bucket>("TransactionBucket", bucketSchema, "transaction_bucket");
 export default BucketModel;

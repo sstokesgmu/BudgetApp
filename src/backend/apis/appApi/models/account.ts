@@ -1,14 +1,5 @@
-import mongoose, {Model, Schema} from "mongoose";
-
-// Create an interface representing a document in MongoDB
-interface IAccount {
-    account_id: number,
-    type: string,
-    date_opened: Date,
-    date_closed: Date | null,
-    starting_amount: number,
-    current_amount: number,
-}
+import {Model, Schema, model as createModel} from "mongoose";
+import { IAccount } from "../../../../shared/interfaces/budget.js";
 
 // Create a Schema correspondoing to the document interface
 const accountSchema = new Schema<IAccount>({
@@ -20,6 +11,5 @@ const accountSchema = new Schema<IAccount>({
     current_amount: {type: Number, required: true},
 });
 
-const AccountModel: Model<IAccount> = mongoose.model("Account", accountSchema);
-
+const AccountModel: Model<IAccount> = createModel<IAccount>("Account", accountSchema);
 export default AccountModel;

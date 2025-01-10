@@ -1,20 +1,17 @@
 //import { ITransaction } from "../../shared/interfaces/transactions.js";
-
-
 const titleCard:Element = document.getElementsByTagName("h1")[0];
 const accountTitle: Element = document.getElementsByTagName("h2")[0];
-const accountType:any = document.getElementById("account_type");
-const balanceEl: any = document.getElementById("balance");
+const accountType: HTMLElement | null = document.getElementById("account_type");
+const balanceEl: HTMLElement | null = document.getElementById("balance");
 //const accountSelect: Element = document.getElementById("accountSelect");
 
-//On initalization select the first user with the Database //!for now
+
 (async () => {
     const users = await fetch("/api/users").then(res => res.json());
     let accounts = await fetch("/api/accounts").then(res => res.json()); 
     modifyHTMLText(users[0]?.name, titleCard);
     DeleteTable(); 
     BuildTable(SetAccountInfo(accounts));
-    
 
     accountSelect?.addEventListener("change", async () => {
         accounts = await fetch("/api/accounts").then(res => res.json());
@@ -25,12 +22,11 @@ const balanceEl: any = document.getElementById("balance");
 })();
 
 function modifyHTMLText(textValue:string, element:Element|HTMLElement):void {
+    console.log(element);
     element.textContent = textValue;
 }
 
 function SetAccountInfo(result:any):number {
-
-
     if (accountSelect?.children.length === 0) {
         for (let element of result) {
             let option: HTMLOptionElement = document.createElement("option");

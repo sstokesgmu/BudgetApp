@@ -1,11 +1,11 @@
-import express, {Request, Response}from "express";
-import AccountModel from "../models/account";
-import BucketModel from "../models/transactions";
+import express, {Request, Response, Router}from "express";
+import AccountModel from "../models/account.js";
+
 
 //create the mini app 
-const router = express.Router();
+const router:Router = express.Router();
 
-router.get("/", async (req: Request,res: Response) => {
+router.get("/", async (_:Request, res:Response) => {
     const accounts = await AccountModel.find({});
     try {
         res.send(accounts);
@@ -24,4 +24,4 @@ router.get("/", async (req: Request,res: Response) => {
 //     });
 // }); 
 
-module.exports = router;
+export default router;

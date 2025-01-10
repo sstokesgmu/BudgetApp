@@ -16,7 +16,6 @@ export default async function run () {
         mongoose.disconnect();
         process.exit(1);
     }
-
     const dbConnection = mongoose.connection;
     dbConnection.on("error", (err) => {
         console.error(`connection error: ${err}`)
@@ -24,12 +23,9 @@ export default async function run () {
     dbConnection.once("disconnected", () => {
         console.log("Disconnected from MongoDB");
     })
-    
     dbConnection.once("connected", async () => {
         console.log(`Database connected: ${dbConnection.name} database`);
     })
-
-  
     return;
 }
 

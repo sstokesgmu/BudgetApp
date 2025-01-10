@@ -1,16 +1,11 @@
-import mongoose, {Model, Schema, Document} from "mongoose"
+import {Model, Schema, model as createModel} from "mongoose"
+import  {IUser} from "../../../../shared/interfaces/budget.js";
 
-interface IUser extends Document {
-    name: string,
-    accounts: number[];
-}
-
-const userSchema:Schema = new Schema<IUser>({
-    name: {type: String, required:true},
-    accounts: {type: [Number], required:true}
+const userSchema = new Schema<IUser>({
+    name: {type:String, required:true},
+    accounts: {type: [Number], required:true} //!Can a user sign up for the site
 })
 //? Research TypeScript Generics and Extending Mongoose Document Interfaces
-//? Why do we have to extend Document why does __id and __v matter?
-const UserModel: Model<IUser> = mongoose.model<IUser>("User", userSchema, "user"); 
-
+//? Why do we have to extend Document why does __v mean?
+const UserModel: Model<IUser> = createModel<IUser>("User", userSchema, "user"); 
 export default UserModel;

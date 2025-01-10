@@ -3,9 +3,7 @@
     "compilerOptions": {
         "rootDir": "./src/backend",
         "target": "ES2016",
-        "module": "CommonJS",
         "strict": true,
-        "outDir": null
     },
     "include": ["src/backend/**/*"],
     "exclude": ["node_modules", "src/frontend/**/*"]

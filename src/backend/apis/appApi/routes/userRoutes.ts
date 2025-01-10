@@ -1,8 +1,8 @@
-import express, {Request, Response} from "express";
-import UserModel from "../models/user";
+import express, {Request, Response, Router} from "express";
+import UserModel from "../models/user.js";
 
 //create mini app
-const router = express.Router();
+const router:Router = express.Router();
 
 router.get("/", async ( _:Request , res:Response) => {
     const user = await UserModel.find({});
@@ -12,5 +12,4 @@ router.get("/", async ( _:Request , res:Response) => {
         res.status(500).send(error);
     }
 });
-
-module.exports = router;
+export default router;
