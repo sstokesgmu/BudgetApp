@@ -1,4 +1,0 @@
-# Rename this file to .env and fill out each variable
-
-SAMPLE_BANK_URI=mongodb+srv://dev-01:RevoEthicsMind@budgetmeclutster.jwhyi.mongodb.net/?retryWrites=true&w=majority&appName=BudgetMeClutster
-

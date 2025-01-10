@@ -70,41 +70,17 @@ What would you add to, or change about your application if given more time? **De
   
 
 ## TODO
-
 ---
-
-- [X] Deprecate the index.html file and make a ts to handle server interaction
-
-- [X] **New Goal id: 1** Create a Database with basic (John Doe) account information
-
-- [X] Completed refactoring from updateProStruct branch
-
-- [X] Connect server to database with mongooose
-
-- [ ] Create routes and handlers for get, post, and put for dataset
-
-- [X] On the frontend create a html page to show
-
-     - [X] name of account holder
-
-     - [X] current balance
-
-     - [X] account #
-
-     - [X] pop up form to add transaction data
-
-     - [X] Add data from trans action route to get data
-
-- [X] Add a data to the transaction collection in the database
-
-- [X] Config server, db, and project to work for testers
+- [ ] Add chart.js to the project
+- [ ] Organize the front end of the project
+- [ ]
 
   
   
 
 ## Possibilities
 
-- [ ] Add chart.js to the project
+
 
   
 
