@@ -11,6 +11,7 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+
 //BudgetMe Api routes middleware
 import accountRoutes from "./apis/appApi/routes/accountRoutes.js";
 import userRoutes  from "./apis/appApi/routes/userRoutes.js";
@@ -40,6 +41,7 @@ app.use("/api/transactions", trans_Routes);
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 app.listen(PORT, () => {
+  console.log(path.join(__dirname, "../frontend"));
   console.log(`Server location: ${__dirname}`);
   console.log(`Server is running at http://localhost:${PORT}`);
 });

@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon src/backend/server.js",
+    "start": "nodemon src/dist/backend/server.js",
     "dev": "ts-node src/server.ts",
     "build": "tsc",
     "build:backend": "tsc --project tsconfig.backend.json"
