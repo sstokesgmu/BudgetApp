@@ -58,8 +58,6 @@ function SetAccountInfo(result:any):number {
 async function BuildTable(account_id:number){
     if(!tableBody)
         return
-    
-
     //!  You will have to throw a limit on this how many buckets do you want to get
     //* When fetch the bucket information, we add the obj of the called bucket for that account
     //* We are going to use the objId to find the correct bucket when deleting data
@@ -107,8 +105,28 @@ function DeleteTable(){
     }
 }
 
-async function deleteTransaction () {
+async function deleteTransaction (event:MouseEvent) {
     console.log("Delete transaction");
+    let a = event.target as HTMLElement;
+    console.log(a.parentElement);
+    let b =  Array.prototype.slice.call( a.parentElement?.children); //! What does this do
+    let c = b.map(element => {return element.textContent});
+     
+    //console.log(c);
+    
+    const data:ITransaction = {
+        comp_name: c[0],
+        amount: c[1],
+        date: c[2],
+        status:c[3],
+    };
+    console.log(data);
+
+    await fetch(`/api/transactions/del/${accountSelect?.value}`, {
+        method:"DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
 }
-
-

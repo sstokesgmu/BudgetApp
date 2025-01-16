@@ -107,7 +107,7 @@
       console.log(formData); // Log form data for debugging
   
       // Send the form data to the server
-      await fetch("/api/transactions", {
+      await fetch(`/api/transactions/add/${form.elements["account"].value}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", // Correct header for JSON
@@ -121,8 +121,6 @@
       const changeEvent = new Event("change", { bubbles: true, cancelable: true });
       accountSelect.dispatchEvent(changeEvent);
     }
-
-  
       // Close the popup after submission
       popupOverlay.style.display = 'none';
     });

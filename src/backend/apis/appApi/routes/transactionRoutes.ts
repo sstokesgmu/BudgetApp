@@ -19,7 +19,7 @@ router.get(
 );
 
 //Post transaction to an account
-router.post("/", async (req: Request, res: Response) => {
+router.post("/add/:accountid", async (req: Request, res: Response) => {
   const transaction: ITransaction = {
     date: new Date(Date.now()),
     amount: req.body?.amount,
@@ -63,6 +63,20 @@ router.post("/", async (req: Request, res: Response) => {
     res.status(500).send(error);
   }
 });
+
+router.delete("/del/:accountId", async (req: Request, res:Response) => {
+  try {
+    
+    console.log("Hello from route");
+
+
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+})
+
 
 function CreateEndDate(startDate:Date):Date {
   let date = new Date(startDate);
