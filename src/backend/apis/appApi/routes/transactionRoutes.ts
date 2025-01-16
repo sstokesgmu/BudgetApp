@@ -9,8 +9,6 @@ router.get(
   "/:accountId",
   async (req: Request, res: Response) => {
     const transactions = await BucketModel.find({account_id: req.params.accountId});
-    console.log(transactions);
-    //ToDo: add an check to see if the collection is empty
     try {
       res.send(transactions);
     } catch (error) {

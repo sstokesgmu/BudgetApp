@@ -104,7 +104,7 @@
         account: form.elements["account"].value,
         type: form.elements["type"].value,
       };
-      console.log(formData); // Log form data for debugging
+      //console.log(formData); // Log form data for debugging
   
       // Send the form data to the server
       await fetch(`/api/transactions/add/${form.elements["account"].value}`, {

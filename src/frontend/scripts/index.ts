@@ -8,8 +8,6 @@ const balanceEl: HTMLElement | null = document.getElementById("balance");
 const tableBody = document.getElementById("table-body");
 
 //const accountSelect: Element = document.getElementById("accountSelect");
-
-
 (async () => {
     const users = await fetch("/api/users").then(res => res.json());
     let accounts = await fetch("/api/accounts").then(res => res.json()); 
@@ -24,14 +22,12 @@ const tableBody = document.getElementById("table-body");
 
     accountSelect?.addEventListener("change", async () => {
         accounts = await fetch("/api/accounts").then(res => res.json());
-        
         DeleteTable();
         BuildTable(SetAccountInfo(accounts));
     })
 })();
 
 function modifyHTMLText(textValue:string, element:Element|HTMLElement):void {
-    console.log(element);
     element.textContent = textValue;
 }
 
@@ -49,10 +45,9 @@ function SetAccountInfo(result:any):number {
     //Populate the html text and the select drop down
     modifyHTMLText(`Account: ${account?.account_id}`, accountTitle);
     modifyHTMLText(`${account?.type}`, accountType?.querySelector("p"));
-    //result successfully returns the accounts //TODO: Populate into a selectable drop down
+    //result successfully returns the accounts
     modifyHTMLText(`$${account?.current_amount}`, balanceEl);
     return account?.account_id;
-    
 }
 
 async function BuildTable(account_id:number){
@@ -68,6 +63,7 @@ async function BuildTable(account_id:number){
     const array:any = bucket.map( (element:any) => {
         return [...element.transactions];
     }).flat();
+    console.log(array);
 
     array.forEach(element => {
         const row = document.createElement("tr");
@@ -99,10 +95,12 @@ async function BuildTable(account_id:number){
 function DeleteTable(){
     if(!tableBody)
         return
-    if(tableBody?.children)
-    for(let i = tableBody?.children.length-1; i > 1; i--) {
-        tableBody.lastChild?.remove();
-    }
+    if(tableBody?.children){
+        console.log(tableBody.children.length)
+        for(let i = tableBody?.children.length - 1; i > -1; i--) {
+           tableBody.lastChild?.remove();
+        }
+    }   
 }
 
 async function deleteTransaction (event:MouseEvent) {
@@ -130,4 +128,10 @@ async function deleteTransaction (event:MouseEvent) {
         },
         body: JSON.stringify(reqBody),
     })
+
+    if (accountSelect && res.ok) {
+        const changeEvent = new Event("change", { bubbles: true, cancelable: true });
+        accountSelect.dispatchEvent(changeEvent);
+    }
+    
 }
