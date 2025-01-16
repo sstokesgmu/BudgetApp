@@ -74,7 +74,8 @@ What would you add to, or change about your application if given more time? **De
 - [ ] Add chart.js to the project
 - [X] Organize the front end of the project
 - [ ] Figure out a way to add .env, without creating a sec. risk
-- [ ] Add the delete route and path route
+- [X] Add a patch route to remove a transaction from a transaction bucket
+- [ ] Add a delete route to delete an account from the DB (that means all the transaction buckets that reference that account)  
 - [ ] Update database with template data
 - [ ] Create Onboarding functionality 
 - [ ] 

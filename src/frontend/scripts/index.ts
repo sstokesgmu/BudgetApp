@@ -112,7 +112,8 @@ async function deleteTransaction (event:MouseEvent) {
     let b =  Array.prototype.slice.call( a.parentElement?.children); //! What does this do
     let c = b.map(element => {return element.textContent});
      
-    //console.log(c);
+    
+    const tableid = tableBody?.dataset.objId;
     
     const data:ITransaction = {
         comp_name: c[0],
@@ -120,13 +121,13 @@ async function deleteTransaction (event:MouseEvent) {
         date: c[2],
         status:c[3],
     };
-    console.log(data);
+    const reqBody = { tableid, data, }
 
-    await fetch(`/api/transactions/del/${accountSelect?.value}`, {
+    const res = await fetch(`/api/transactions/update/${accountSelect?.value}`, {
         method:"DELETE",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(reqBody),
     })
 }

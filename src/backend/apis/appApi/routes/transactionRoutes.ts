@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import BucketModel from "../models/transactions.js";
-import { ITransaction } from "../../../../shared/interfaces/budget.js";
+import { IAccount, ITransaction } from "../../../../shared/interfaces/budget.js";
 
 const router: any = express.Router();
 
@@ -9,6 +9,7 @@ router.get(
   "/:accountId",
   async (req: Request, res: Response) => {
     const transactions = await BucketModel.find({account_id: req.params.accountId});
+    console.log(transactions);
     //ToDo: add an check to see if the collection is empty
     try {
       res.send(transactions);
@@ -64,13 +65,23 @@ router.post("/add/:accountid", async (req: Request, res: Response) => {
   }
 });
 
-router.delete("/del/:accountId", async (req: Request, res:Response) => {
+router.delete("/update/:accountId", async (req: Request, res:Response) => {
   try {
-    
-    console.log("Hello from route");
+    //ToDo:Find the document that matches the obj id and holds the transaction (compare the date)
+    const bucket: any = await BucketModel.findByIdAndUpdate(req.body.tableid, 
+      {
+        $pull: {
+            transactions: {date: new Date(req.body.data.date)}   
+         }
+      },
+      {new:true} 
+    ).exec();
 
-
-
+    if(!bucket)
+      throw new Error("This is not the right bucket");     
+  
+    //ToDo:Delete the transaction
+    res.status(200).send("Delete request was successful");
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
