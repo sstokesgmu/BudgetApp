@@ -1,8 +1,12 @@
-//import { ITransaction } from "../../shared/interfaces/transactions.js";
+import { ITransaction } from "../../shared/interfaces/budget.js";
+
+
 const titleCard:Element = document.getElementsByTagName("h1")[0];
 const accountTitle: Element = document.getElementsByTagName("h2")[0];
 const accountType: HTMLElement | null = document.getElementById("account_type");
 const balanceEl: HTMLElement | null = document.getElementById("balance");
+const tableBody = document.getElementById("table-body");
+
 //const accountSelect: Element = document.getElementById("accountSelect");
 
 
@@ -10,6 +14,11 @@ const balanceEl: HTMLElement | null = document.getElementById("balance");
     const users = await fetch("/api/users").then(res => res.json());
     let accounts = await fetch("/api/accounts").then(res => res.json()); 
     modifyHTMLText(users[0]?.name, titleCard);
+    
+    //! This needs to change
+    if(tableBody)
+        tableBody.dataset.objId = " ";
+
     DeleteTable(); 
     BuildTable(SetAccountInfo(accounts));
 
@@ -47,21 +56,24 @@ function SetAccountInfo(result:any):number {
 }
 
 async function BuildTable(account_id:number){
-    const tableBody = document.getElementById("table-body");
     if(!tableBody)
         return
-
     
+
     //!  You will have to throw a limit on this how many buckets do you want to get
+    //* When fetch the bucket information, we add the obj of the called bucket for that account
+    //* We are going to use the objId to find the correct bucket when deleting data
     const bucket = await fetch(`/api/transactions/${account_id}`).then(res => res.json());
+
+    tableBody.dataset.objId = bucket[0]?._id;
+
     const array:any = bucket.map( (element:any) => {
         return [...element.transactions];
     }).flat();
 
-    console.log(array);
     array.forEach(element => {
-       
         const row = document.createElement("tr");
+        row.addEventListener("click", deleteTransaction)
 
         // Create individual table cells
         const compNameCell = document.createElement("td");
@@ -87,15 +99,16 @@ async function BuildTable(account_id:number){
     });
 }
 function DeleteTable(){
-    const tableBody = document.getElementById("table-body");
     if(!tableBody)
         return
-    //for each
-    console.log(tableBody?.children)
     if(tableBody?.children)
     for(let i = tableBody?.children.length-1; i > 1; i--) {
         tableBody.lastChild?.remove();
     }
+}
+
+async function deleteTransaction () {
+    console.log("Delete transaction");
 }
 
 

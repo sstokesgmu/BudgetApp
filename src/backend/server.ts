@@ -39,9 +39,13 @@ app.use("/api/transactions", trans_Routes);
 
 //Send all the frontend files to the middleware, change the url to access othe html files 
 app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname, "../shared")));
+console.log(path.join(__dirname, "../frontend"));
+console.log(path.join(__dirname, "../shared"));
+
 
 app.listen(PORT, () => {
-  console.log(path.join(__dirname, "../frontend"));
+  //console.log(path.join(__dirname, "../frontend"));
   console.log(`Server location: ${__dirname}`);
   console.log(`Server is running at http://localhost:${PORT}`);
 });

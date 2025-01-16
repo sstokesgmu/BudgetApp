@@ -72,8 +72,12 @@ What would you add to, or change about your application if given more time? **De
 ## TODO
 ---
 - [ ] Add chart.js to the project
-- [ ] Organize the front end of the project
-- [ ]
+- [X] Organize the front end of the project
+- [ ] Figure out a way to add .env, without creating a sec. risk
+- [ ] Add the delete route and path route
+- [ ] Update database with template data
+- [ ] Create Onboarding functionality 
+- [ ] 
 
   
   
