@@ -1,6 +1,7 @@
 import express, {Request, Response, Router} from "express";
 import UserModel from "../models/user.js";
 import { IAccount } from "../../../../shared/interfaces/budget.js";
+import AccountModel from "../models/account.js";
 
 //create mini app
 const router:Router = express.Router();
@@ -14,28 +15,20 @@ router.get("/", async ( _:Request , res:Response) => {
     }
 });
 
-
-
-
-
-
 // These route modify the 
 router.post("/create/:accountId", async(req:Request, res:Response) => {
     console.log(req.params);
+    const { accountId } = req.params;
+    const { accountType, amount} = req.body
+
     try {
         const result = await UserModel.findOneAndUpdate(
             {"accounts": {$exists: true, $type: "array"}},
-            {$push: {"accounts": req.params.accountId}},
+            {$push: {"accounts": accountId}},
             {new: true}
-        ).exec()//.then(createAccount(req.params.account_id, "savings", 1000));
-
-
-        //TODO: This is temporary
-
-
-
-
-
+        ).exec()
+        
+        await createAccount(parseInt(accountId), accountType, amount);
         res.status(200).send(`The response is okay: ${result}.`);
     } catch (error) {
         res.status(500).send(error);
@@ -55,8 +48,7 @@ router.patch("/del/:accountId", async(req:Request, res:Response) => {
 });
 
 async function createAccount (id:number, accountType:string, startNumber:number) {
-    console.log("Create a new account");
-    const obj:IAccount = {
+    const data:IAccount = {
         account_id : id,
         type: accountType,
         date_opened: new Date(Date.now()),
@@ -64,14 +56,13 @@ async function createAccount (id:number, accountType:string, startNumber:number)
         starting_amount: startNumber,
         current_amount: startNumber,
     }
-    const res = await fetch(`/api/transactions/create/bucket`, {
-        method:"POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(obj)
-    })
-   
+    try {
+        const account = new AccountModel(data);
+        await account.save();
+        console.log(`Account created successfully: ${account}`)
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 
