@@ -1,4 +1,4 @@
-import { ITransaction } from "../../shared/interfaces/budget.js";
+import { ITransaction, ITransaction_Bucket } from "../../shared/interfaces/budget.js";
 
 
 const titleCard:Element = document.getElementsByTagName("h1")[0];
@@ -103,14 +103,15 @@ function DeleteTable(){
     }   
 }
 
+
+
+
 async function deleteTransaction (event:MouseEvent) {
     console.log("Delete transaction");
     let a = event.target as HTMLElement;
-    console.log(a.parentElement);
     let b =  Array.prototype.slice.call( a.parentElement?.children); //! What does this do
     let c = b.map(element => {return element.textContent});
      
-    
     const tableid = tableBody?.dataset.objId;
     
     const data:ITransaction = {
@@ -122,7 +123,7 @@ async function deleteTransaction (event:MouseEvent) {
     const reqBody = { tableid, data, }
 
     const res = await fetch(`/api/transactions/update/${accountSelect?.value}`, {
-        method:"DELETE",
+        method:"PATCH",
         headers: {
             "Content-Type": "application/json",
         },
@@ -133,5 +134,4 @@ async function deleteTransaction (event:MouseEvent) {
         const changeEvent = new Event("change", { bubbles: true, cancelable: true });
         accountSelect.dispatchEvent(changeEvent);
     }
-    
 }

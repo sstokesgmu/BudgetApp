@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import BucketModel from "../models/transactions.js";
-import { IAccount, ITransaction } from "../../../../shared/interfaces/budget.js";
+import { IAccount, ITransaction, ITransaction_Bucket } from "../../../../shared/interfaces/budget.js";
 
 const router: any = express.Router();
 
@@ -16,6 +16,16 @@ router.get(
     }
   },
 );
+
+
+router.post("/create/bucket", async (req: Request, res:Response) => {
+    console.log(req.body);
+    const result = CreateModel(undefined, req.body.data);
+    result.save()
+    res.send(`Created a new bucket ${result}`);
+})
+
+
 
 //Post transaction to an account
 router.post("/add/:accountid", async (req: Request, res: Response) => {
@@ -37,14 +47,13 @@ router.post("/add/:accountid", async (req: Request, res: Response) => {
       res.send("Created a new bucket");
     } else {
       //We have a collection but lets think about this:
-      /*
+        /*
         1. does the account number match in the data set match the account number of the transaction 
         2. does the data set have a bucket that is within the time frame
        */
       const bucket = await BucketModel.findOne({"account_id": transaction.account,
                 "start_date": {"$lte":transaction.date}, "end_date": {"$gte":transaction.date}
       });
-
       if(!bucket)
       {
         //Create a new bucket
@@ -63,15 +72,11 @@ router.post("/add/:accountid", async (req: Request, res: Response) => {
   }
 });
 
-router.delete("/update/:accountId", async (req: Request, res:Response) => {
+router.patch("/update/:accountId", async (req: Request, res:Response) => {
   try {
-    //ToDo:Find the document that matches the obj id and holds the transaction (compare the date)
-    const bucket: any = await BucketModel.findByIdAndUpdate(req.body.tableid, 
-      {
-        $pull: {
-            transactions: {date: new Date(req.body.data.date)}   
-         }
-      },
+    const bucket: any = await BucketModel.findByIdAndUpdate(
+      req.body.tableid, 
+      {$pull: {transactions: {date: new Date(req.body.data.date)}}},
       {new:true} 
     ).exec();
 
@@ -86,24 +91,33 @@ router.delete("/update/:accountId", async (req: Request, res:Response) => {
   }
 })
 
-
 function CreateEndDate(startDate:Date):Date {
   let date = new Date(startDate);
   date.setDate(date.getDay() + 14); 
   return date;
 }
 
-function CreateModel(transaction:ITransaction):any {
-
-  let array_copy:ITransaction[] = [transaction];
-  const bucket = new BucketModel({
-    account_id: transaction.account,
-    transaction_count: 1,
-    start_date: transaction.date,
-    end_date: CreateEndDate(transaction.date),
-    transactions: array_copy
-  });
-  return bucket;
+function CreateModel(transaction?:ITransaction, trans_bucket?:ITransaction_Bucket ):any {
+  try {
+    let bucket:ITransaction_Bucket;
+    if(trans_bucket) {
+      //Create the Transaction bucket with a new bucket.
+      bucket = trans_bucket;
+    } else if (transaction) {
+      //Create the transaction bucket with the first transaction
+      let array:ITransaction[] = [transaction];
+      bucket = new BucketModel({account_id: transaction.account,
+        transaction_count: 1,
+        start_date: transaction.date,
+        end_date: CreateEndDate(transaction.date),
+        transactions: array,
+      });
+    } else {
+      throw new Error("Either transaction of trans_bucket must be provided")
+    }
+    return bucket
+  } catch(error) {
+    console.error(error);
+  }
 }
-
 export default router;
