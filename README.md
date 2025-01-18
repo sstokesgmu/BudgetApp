@@ -19,6 +19,8 @@ Lets walk through the set up:
 1. Clone the repo
   
 
+
+
 2. This code base uses a couple of standard packages like express, dotenv, mongoose. Your gonna need to install it to.
 
 ```bash
@@ -48,7 +50,15 @@ npm start
 
 You should see the account info (name, balance, type). You can change what information you see by selecting an account inside of the drop down. That changes the information shown on the transaction table. Click "Add a Transaction" and submit the form to update the table
 
-## SBA 308 Requirements
+
+
+## Routes
+
+
+
+
+
+## SBA 319 Requirements
 
 - This code base uses the fetch API religiously for starting routes
 
@@ -75,8 +85,8 @@ What would you add to, or change about your application if given more time? **De
 - [X] Organize the front end of the project
 - [ ] Figure out a way to add .env, without creating a sec. risk
 - [X] Add a patch route to remove a transaction from a transaction bucket
-- [ ] Add a delete route to delete an account from the DB (that means all the transaction buckets that reference that account)  
-- [ ] Update database with template data
+- [X] Add a delete route to delete an account from the DB (that means all the transaction buckets that reference that account)  
+- [X] Update database with a transaction seed 
 - [ ] Create Onboarding functionality 
 - [ ] 
 

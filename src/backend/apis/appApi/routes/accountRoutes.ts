@@ -1,14 +1,18 @@
 import express, {Request, Response, Router}from "express";
 import AccountModel from "../models/account.js";
 
-
-//create the mini app 
 const router:Router = express.Router();
 
+/** 
+ * @param {string} - / refers to the root
+ * @param {Request} 
+ * @param {Response} 
+ * @callback => will fetch all documents within the accounts collection
+*/
 router.get("/", async (_:Request, res:Response) => {
-    const accounts = await AccountModel.find({});
+    const result = await AccountModel.find({});
     try {
-        res.send(accounts);
+        res.status(200).send(result);
     } catch (error) {
         res.status(500).send(error);
     }

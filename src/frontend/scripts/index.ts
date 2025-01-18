@@ -32,7 +32,7 @@ function modifyHTMLText(textValue:string, element:Element|HTMLElement):void {
 }
 
 function SetAccountInfo(result:any):number {
-    if (accountSelect?.children.length === 0) {
+    if (accountSelect?.children.length === 0) { //this should check for the length of the result array
         for (let element of result) {
             let option: HTMLOptionElement = document.createElement("option");
             option.setAttribute("value", element.account_id); // Use correct `value`
@@ -67,7 +67,7 @@ async function BuildTable(account_id:number){
 
     array.forEach(element => {
         const row = document.createElement("tr");
-        row.addEventListener("click", deleteTransaction)
+        row.addEventListener("dblclick", deleteTransaction)
 
         // Create individual table cells
         const compNameCell = document.createElement("td");
@@ -103,9 +103,6 @@ function DeleteTable(){
     }   
 }
 
-
-
-
 async function deleteTransaction (event:MouseEvent) {
     console.log("Delete transaction");
     let a = event.target as HTMLElement;
@@ -113,6 +110,7 @@ async function deleteTransaction (event:MouseEvent) {
     let c = b.map(element => {return element.textContent});
      
     const tableid = tableBody?.dataset.objId;
+    console.log(tableid);
     
     const data:ITransaction = {
         comp_name: c[0],
@@ -122,7 +120,7 @@ async function deleteTransaction (event:MouseEvent) {
     };
     const reqBody = { tableid, data, }
 
-    const res = await fetch(`/api/transactions/update/${accountSelect?.value}`, {
+    const res = await fetch(`/api/transactions/del/${accountSelect?.value}`, {
         method:"PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -130,7 +128,8 @@ async function deleteTransaction (event:MouseEvent) {
         body: JSON.stringify(reqBody),
     })
 
-    if (accountSelect && res.ok) {
+    //This re-renders the page by starting the change event
+    if (accountSelect && res.ok) { 
         const changeEvent = new Event("change", { bubbles: true, cancelable: true });
         accountSelect.dispatchEvent(changeEvent);
     }

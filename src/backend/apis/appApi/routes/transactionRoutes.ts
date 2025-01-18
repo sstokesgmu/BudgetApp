@@ -1,35 +1,33 @@
 import express, { Request, Response } from "express";
 import BucketModel from "../models/transactions.js";
-import { IAccount, ITransaction, ITransaction_Bucket } from "../../../../shared/interfaces/budget.js";
+import {ITransaction, ITransaction_Bucket } from "../../../../shared/interfaces/budget.js";
 
 const router: any = express.Router();
 
-// Get all transactions from an account: need account nnumber
-router.get(
-  "/:accountId",
-  async (req: Request, res: Response) => {
-    const transactions = await BucketModel.find({account_id: req.params.accountId});
+/** 
+ * @param {string} - route endpoint
+ * @param {Request} 
+ * @param {Response} 
+ * @callback => Finds all transaction documents that match the given account id 
+*/
+router.get("/:accountId",  async (req: Request, res: Response) => {
+    const result = await BucketModel.find({account_id: req.params.accountId});
     try {
-      res.send(transactions);
+      res.status(200).send(result);
     } catch (error) {
       res.status(500).send(error);
     }
   },
 );
 
-
-router.post("/create/bucket", async (req: Request, res:Response) => {
-    console.log(req.body);
-    const result = CreateModel(undefined, req.body.data);
-    result.save()
-    res.send(`Created a new bucket ${result}`);
-})
-
-
-
-//Post transaction to an account
+/** 
+ * @param {string} - route endpoint
+ * @param {Request} 
+ * @param {Response} 
+ * @callback => 
+*/
 router.post("/add/:accountid", async (req: Request, res: Response) => {
-  const transaction: ITransaction = {
+  const transactionObj: ITransaction = {
     date: new Date(Date.now()),
     amount: req.body?.amount,
     trans_type: req.body?.type,
@@ -38,32 +36,35 @@ router.post("/add/:accountid", async (req: Request, res: Response) => {
     status: "pending",
   };
   try {
-    const exist:Array<Document>  = await BucketModel.find({}, { limit: 1});
+  /**
+   * @var exist - will indicate if the account exist in the collection
+   */
+    const exist:Array<Document> = await BucketModel.find({}, {limits: 1});
     if(exist.length === 0)
     {
-      console.log("There are no documents inside of the collection, create a transaction bucket");
-      const bucket = CreateModel(transaction);
-      bucket.save();
-      res.send("Created a new bucket");
+      console.log("There are no documents inside of the collection, creating a  new transaction bucket");
+      const result = CreateModel(transactionObj);
+      result.save();
+      res.status(200).send(result);
     } else {
       //We have a collection but lets think about this:
         /*
-        1. does the account number match in the data set match the account number of the transaction 
+        1. does the account number in the data set match the account number of the transaction 
         2. does the data set have a bucket that is within the time frame
        */
-      const bucket = await BucketModel.findOne({"account_id": transaction.account,
-                "start_date": {"$lte":transaction.date}, "end_date": {"$gte":transaction.date}
+      const doesDocExist = await BucketModel.findOne({"account_id": transactionObj.account,
+                "start_date": {"$lte":transactionObj.date}, "end_date": {"$gte":transactionObj.date}
       });
-      if(!bucket)
+      if(doesDocExist)
       {
-        //Create a new bucket
-        const new_bucket = CreateModel(transaction);
-        new_bucket.save();
-        res.send("Create a new bucket");
+        const result = await doesDocExist.updateOne({$push: {transactions: transactionObj}});
+        res.status(200).send(`The response is okay: ${result}`);
+        
       } else {
-        let result:any = null;
-        result = await bucket.updateOne({$push: {transactions: transaction}});
-        res.send("Added transaction to correct bucket");
+        //Create a new document
+        const result = CreateModel(transactionObj);
+        result.save();
+        res.status(200).send(result);
       }
     }
   } catch (error) {
@@ -72,31 +73,40 @@ router.post("/add/:accountid", async (req: Request, res: Response) => {
   }
 });
 
-router.patch("/update/:accountId", async (req: Request, res:Response) => {
+
+router.patch("/del/:accountId", async (req: Request, res:Response) => {
   try {
-    const bucket: any = await BucketModel.findByIdAndUpdate(
+    const result: any = await BucketModel.findByIdAndUpdate(
       req.body.tableid, 
-      {$pull: {transactions: {date: new Date(req.body.data.date)}}},
+      {$pull: {transactions:req.body.data}},
       {new:true} 
     ).exec();
-
-    if(!bucket)
+    if(!result)
       throw new Error("This is not the right bucket");     
-  
-    //ToDo:Delete the transaction
-    res.status(200).send("Delete request was successful");
+    res.status(200).send(result);
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
   }
 })
 
+/**
+ * @param startDate 
+ * @returns a new date 14 days after the start date
+ */
 function CreateEndDate(startDate:Date):Date {
   let date = new Date(startDate);
   date.setDate(date.getDay() + 14); 
   return date;
 }
 
+/**
+ * 
+ * @param transaction 
+ * @param trans_bucket 
+ * @returns a new compiled Bucket model where the first element of the transaction array is the transaction 
+ * passed in the request. 
+ */
 function CreateModel(transaction?:ITransaction, trans_bucket?:ITransaction_Bucket ):any {
   try {
     let bucket:ITransaction_Bucket;
@@ -121,3 +131,10 @@ function CreateModel(transaction?:ITransaction, trans_bucket?:ITransaction_Bucke
   }
 }
 export default router;
+
+
+// router.post("/create/bucket", async (req: Request, res:Response) => {
+//     const result = CreateModel(undefined, req.body.data);
+//     result.save()
+//     res.send(`Created a new bucket ${result}`);
+// })

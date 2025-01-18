@@ -3,10 +3,15 @@ import dotenv from "dotenv";
 import session from "express-session";
 import path from "path";
 import ConnectToDB from "./db.js";
+import BucketModel from "./apis/appApi/models/transactions.js";
+import transaction_seed from './seed.js';
+
 
 //? https://stackoverflow.com/questions/64383909/dirname-is-not-defined-error-in-node-js-14-version
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -44,8 +49,30 @@ console.log(path.join(__dirname, "../frontend"));
 console.log(path.join(__dirname, "../shared"));
 
 
+app.get("/transactions/seed/:accountID", async (req,res) =>{
+  try {
+    await BucketModel.findOneAndUpdate(
+      {"account_id" : req.params.accountID},
+      {$pull: {"transactions": {}}},
+    );
+
+    const result = await BucketModel.findOneAndUpdate (
+      {"account_id": req.params.accountID},
+      {$push: {"transactions":transaction_seed}},
+      {new:true}
+    )
+    res.status(200).send(transaction_seed);
+
+  } catch (error) {
+    console.log(`Something went wrong loading seed data: ${error}`)
+  }
+
+
+})
+
 app.listen(PORT, () => {
   //console.log(path.join(__dirname, "../frontend"));
   console.log(`Server location: ${__dirname}`);
   console.log(`Server is running at http://localhost:${PORT}`);
 });
+

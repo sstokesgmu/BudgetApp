@@ -49,7 +49,7 @@
       <input type="number" name="amount" placeholder="Enter amount" required>
 
       <label for="account">Apply to Which Account</label>
-      <select name="account" required>
+      <select id="popup-accounts" name="account" required>
         <option value="123">Account: 123</option>
         <option value="456">Account: 456</option>
         <option value="789">Account: 789</option>
@@ -74,10 +74,21 @@
     const popupOverlay = document.getElementById('popupOverlay');
     const cancelButton = document.querySelector('.cancel'); // Update this to match the correct class
     const accountSelect = document.getElementById("accountSelect");
+    const popupSelect = document.getElementById("popup-accounts")
+
+    async function setPopUpInfo(){
+      accounts = await fetch("/api/accounts").then(res => res.json());
+      console.log(accounts);
+      if(popupSelect.children.length != accounts.length)
+      {
+        console.log("update options");
+      }
+    }
   
     // Open the popup
     openPopupButton.addEventListener('click', () => {
       popupOverlay.style.display = 'flex';
+      setPopUpInfo();
     });
   
     // Close the popup
