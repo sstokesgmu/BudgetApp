@@ -24,16 +24,16 @@ router.get("/:accountId",  async (req: Request, res: Response) => {
  * @param {string} - route endpoint
  * @param {Request} 
  * @param {Response} 
- * @callback => 
+ * @callback => Add a transaction to an current transaction bucket or create a new transaction bucket
 */
 router.post("/add/:accountid", async (req: Request, res: Response) => {
   const transactionObj: ITransaction = {
     date: new Date(Date.now()),
     amount: req.body?.amount,
     trans_type: req.body?.type,
-    account: req.body?.account,
     comp_name: req.body?.company ,
     status: "pending",
+    account: req.body?.account,
   };
   try {
   /**

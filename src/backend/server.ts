@@ -38,8 +38,8 @@ const PORT: number = parseInt(process.env.PORT ?? "4000", 10);
 
 app.use(express.json()); //TODO: Notes=> https://www.geeksforgeeks.org/express-js-express-json-function/
 
-app.use("/api/accounts", accountRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/accounts", accountRoutes);
 app.use("/api/transactions", trans_Routes);
 
 //Send all the frontend files to the middleware, change the url to access othe html files 

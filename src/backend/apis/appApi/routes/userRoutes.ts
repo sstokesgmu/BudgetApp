@@ -10,7 +10,7 @@ const router:Router = express.Router();
  * @param {string} - / refers to the root
  * @param {Request} 
  * @param {Response} 
- * @callback => will fetch all documents within the accounts collection
+ * @callback => will fetch all documents within the user collection
 */
 router.get("/", async ( _:Request , res:Response) => {
     const user = await UserModel.find({});
@@ -49,7 +49,7 @@ router.post("/create/:accountId", async(req:Request, res:Response) => {
  * @param {Request} 
  * @param {Response} 
  * @callback => will queries to see if a document of model user has an accounts array of @type {number} exists
- * Then we push (add) the new account id to the array   
+ * Then we pull (remove) the an account from the array   
 */
 router.patch("/del/:accountId", async(req:Request, res:Response) => {
     try {
