@@ -16,8 +16,13 @@ Lets walk through the set up:
 
 1. Clone the repo and navigate to the correct branch 
 
-
-
+```bash
+git clone https ... 
+git branch -r  (This shows all the remote branches)
+git fetch origin Sba-319
+git checkout Sba-319
+```
+if you want to see all the branchs on your local machine run `git branch`
 
 2. This code base uses a couple of standard packages like express, dotenv, mongoose. Your gonna need to install it to.
 
