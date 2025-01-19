@@ -83,7 +83,7 @@ We are using a route prefix of: `/api/users`
  ```
 Base route that will fetch all documents within the user collection
 
-**POST** `/create/:accountId 
+**POST** `/create/:accountId`
 
 ```
 http//:localhost:port/api/users/create/(new account number)
