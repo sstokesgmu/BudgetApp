@@ -8,12 +8,12 @@ export interface IUser {
 }
 export interface IAccount {
     account_num: number,
-    type: string, 
-    date_opened: Date,
-    date_closed: Date | null, 
-    starting_amount: number, 
-    current_amount: number,
-    bucket: ObjectId[] | null,
+    type?: string, 
+    date_opened?: Date,
+    date_closed?: Date | null, 
+    starting_amount?: number, 
+    current_amount?: number | null,
+    bucket?: ObjectId[] | null,
 }
 
 export interface ITransaction_Bucket extends Document {

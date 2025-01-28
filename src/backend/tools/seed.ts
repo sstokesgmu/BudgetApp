@@ -1,6 +1,36 @@
-import { ITransaction } from "../shared/interfaces/budget"
+import { ITransaction, IAccount } from "../shared/interfaces/budget"
 
-export const account_seed:Number[] = [123,456,789]
+export const account_seed:Number = 123
+export const accounts_seed:Number[] = [456,789]
+export const account_seed_full:IAccount = {
+    account_num:123,
+    type: "savings",
+    date_opened: new Date(Date.now()),
+    date_closed: null,
+    starting_amount: 1000.00,
+    current_amount: null,
+    bucket:null
+}
+export const accounts_seed_full: IAccount[] = [
+    {
+        account_num:456,
+        type: "Checking",
+        date_opened: new Date(Date.now()),
+        date_closed: null,
+        starting_amount: 2000.00,
+        current_amount: null,
+        bucket:null
+    },
+    {
+        account_num:456,
+        type: "Savings",
+        date_opened: new Date(Date.now()),
+        date_closed: null,
+        starting_amount: 3000.00,
+        current_amount: null,
+        bucket:null
+    },
+]
 
 export const transaction_seed:ITransaction[]= [
     {

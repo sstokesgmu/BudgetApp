@@ -52,7 +52,6 @@ router.post("/add/:accountid", async (req: Request, res: Response) => {
     trans_type: req.body?.type,
     comp_name: req.body?.company ,
     status: "pending",
-    account: req.body?.account,
   };
   try {
   /**

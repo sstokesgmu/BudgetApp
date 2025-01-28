@@ -7,6 +7,8 @@ import AccountModel from '../apis/appApi/models/account.js';
 import UserModel from '../apis/appApi/models/user.js';
 
 export namespace BudgetApp {  
+
+
     const router:Router = express.Router(); 
     //seed routes //Todo: Add valiadation to make sure the resquest has admin privliges to seed data
     router.post('/seed/accounts', async(req:Request, res:Response) => {
@@ -44,6 +46,8 @@ export namespace BudgetApp {
     
     type AccountParams = number | number[] | IAccount | IAccount[]; 
         
+
+    CreateAccount(account_seed as number)
     export async function CreateAccount(param:AccountParams){
         //Type guards 
         let a = "this is an";
@@ -78,9 +82,8 @@ export namespace BudgetApp {
     }
     
     function isFilledAccount(a: Number| IAccount): a is IAccount{
-        return typeof a === "object" 
-
-    
+        return typeof a === "object" && "account_num" in a
+    }
 
         //else it is object or array of objects then we can save it to the db 
 
