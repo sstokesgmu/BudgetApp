@@ -1,6 +1,8 @@
 import { ITransaction } from "../shared/interfaces/budget"
 
-const transaction_seed:ITransaction[]= [
+export const account_seed:Number[] = [123,456,789]
+
+export const transaction_seed:ITransaction[]= [
     {
         date: new Date(Date.now()),
         amount: 72.36,
@@ -72,5 +74,3 @@ const transaction_seed:ITransaction[]= [
         status: "completed"
     }
 ]
-
-export default transaction_seed

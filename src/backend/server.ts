@@ -4,7 +4,7 @@ import session from "express-session";
 import path from "path";
 import ConnectToDB from "./db.js";
 import BucketModel from "./apis/appApi/models/transactions.js";
-import transaction_seed from './tools/seed.js';
+
 
 
 //? https://stackoverflow.com/questions/64383909/dirname-is-not-defined-error-in-node-js-14-version
@@ -49,25 +49,32 @@ console.log(path.join(__dirname, "../frontend"));
 console.log(path.join(__dirname, "../shared"));
 
 
-app.get("/transactions/seed/:accountID", async (req,res) =>{
-  try {
-    await BucketModel.findOneAndUpdate(
-      {"account_id" : req.params.accountID},
-      {$pull: {"transactions": {}}},
-    );
+// app.post('/user-accounts/seed', async (req:Request, res:Response) => {
+//   try {
+    
 
-    const result = await BucketModel.findOneAndUpdate (
-      {"account_id": req.params.accountID},
-      {$push: {"transactions":transaction_seed}},
-      {new:true}
-    )
-    res.status(200).send(transaction_seed);
+//   } catch(error) {
+//     console.error()
+//   }
 
-  } catch (error) {
-    console.log(`Something went wrong loading seed data: ${error}`)
-  }
+// });
+// app.get("/transactions/seed/:accountID", async (req,res) =>{
+//   try {
+//     await BucketModel.findOneAndUpdate(
+//       {"account_id" : req.params.accountID},
+//       {$pull: {"transactions": {}}},
+//     );
 
+//     const result = await BucketModel.findOneAndUpdate (
+//       {"account_id": req.params.accountID},
+//       {$push: {"transactions":transaction_seed}},
+//       {new:true}
+//     )
+//     res.status(200).send(transaction_seed);
 
+//   } catch (error) {
+//     console.log(`Something went wrong loading seed data: ${error}`)
+//   }
 })
 
 //Adding 0.0.0.0 Makes the this interfaces on the LAN makes it on the public 

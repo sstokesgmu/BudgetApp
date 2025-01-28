@@ -7,7 +7,7 @@ export interface IUser {
     accounts: number[],
 }
 export interface IAccount {
-    account_id: number,
+    account_num: number,
     type: string, 
     date_opened: Date,
     date_closed: Date | null, 
@@ -21,13 +21,13 @@ export interface ITransaction_Bucket extends Document {
     transaction_count: number,
     start_date: Date,
     end_date: Date | null,
-    transactions: ITransaction[];
+    transactions: ITransaction[] | null;
 }
 export interface ITransaction {
     date: Date;
     amount: number;
-    account?: number;
-    trans_type?: string;
+    // account?: number;
+    trans_type: string;
     comp_name: string;
     status: string;
 }

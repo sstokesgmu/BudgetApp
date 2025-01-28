@@ -3,8 +3,8 @@ import { IAccount } from "../../../shared/interfaces/budget.js";
 import {ObjectId} from 'mongodb'
 // Create a Schema correspondoing to the document interface
 const accountSchema = new Schema<IAccount>({
-    account_id: {type: Number, required:true, unique: true},
-    type: { type: String, required: true},
+    account_num: {type: Number, required:true, unique: true},
+    type: {type: String, required: true},
     date_opened: {type: Date, required: true},
     date_closed: {type: Date, default:null},
     starting_amount: {type: Number, required: true},
