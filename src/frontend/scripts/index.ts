@@ -1,4 +1,4 @@
-import { ITransaction, ITransaction_Bucket } from "../../shared/interfaces/budget.js";
+import { ITransaction, ITransaction_Bucket } from "../../backend/shared/interfaces/budget.js";
 
 
 const titleCard:Element = document.getElementsByTagName("h1")[0];

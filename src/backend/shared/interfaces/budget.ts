@@ -7,7 +7,7 @@ export interface IUser {
     accounts: number[],
 }
 export interface IAccount {
-    account_number: number,
+    account_id: number,
     type: string, 
     date_opened: Date,
     date_closed: Date | null, 

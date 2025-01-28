@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import {Types} from 'mongoose';
 import BucketModel from "../models/transactions.js";
-import {ITransaction, ITransaction_Bucket } from "../../../../shared/interfaces/budget.js";
+import {ITransaction, ITransaction_Bucket } from "../../../shared/interfaces/budget.js";
 
 const router: any = express.Router();
 
@@ -15,7 +15,13 @@ const router: any = express.Router();
  * parameters is provided _id=string then we will get a single transaction bucket 
 */
 router.get("/:accountId",  async (req: Request, res: Response) => {
-    const id = new Types.ObjectId(req.query._id as string)
+    let id;
+    if(!req.query._id)
+      console.log("Selecting all transaction buckets")
+    else {
+      id = new Types.ObjectId(req.query._id as string)
+      console.log("Selecting one transaction bucket that matches an object id");
+    }
     const result = await BucketModel.find({
         account_id: req.params.accountId, 
         ...(id ? {_id:id}:{})} //https://www.youtube.com/watch?v=abIJLkqh6PI 

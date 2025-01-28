@@ -1,6 +1,6 @@
 import express, {Request, Response, Router} from "express";
 import UserModel from "../models/user.js";
-import { IAccount } from "../../../../shared/interfaces/budget.js";
+import { IAccount } from "../../../shared/interfaces/budget.js";
 import AccountModel from "../models/account.js";
 
 //create mini app
@@ -29,16 +29,22 @@ router.get("/", async ( _:Request , res:Response) => {
  * Then we push (add) the new account id to the array   
 */
 router.post("/create/:accountId", async(req:Request, res:Response) => {
-    const { accountId } = req.params;
-    const { accountType, amount} = req.body
+    // const { accountId } = req.params;
+    // const { accountType, amount} = req.body
+    
+    //Todo: for each account id add the array
+
+
     try {
-        const result = await UserModel.findOneAndUpdate(
-            {"accounts": {$exists: true, $type: "array"}},
-            {$push: {"accounts": accountId}},
-            {new: true}
-        ).exec()
-        await createAccount(parseInt(accountId), accountType, amount);
-    res.status(200).send(result);
+        console.log(req.body.params)
+        //Todo: call CreateAccount(req.body.?account)
+        // const result = await UserModel.findOneAndUpdate(
+        //     {"accounts": {$exists: true, $type: "array"}},
+        //     {$push: {"accounts": accountId}},
+        //     {new: true}
+        // ).exec()
+       // await createAccount(parseInt(accountId), accountType, amount);
+        res.status(200).send("okay");
     } catch (error) {
         res.status(500).send(error);
     }
@@ -74,7 +80,7 @@ router.patch("/del/:accountId", async(req:Request, res:Response) => {
  */
 async function createAccount (id:number, accountType:string, startNumber:number) {
     const data:IAccount = {
-        account_number : id,
+        account_id : id,
         type: accountType,
         date_opened: new Date(Date.now()),
         date_closed: null,

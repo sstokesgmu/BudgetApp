@@ -1,5 +1,5 @@
 import {Schema,Document, model as createModel} from "mongoose";
-import {ITransaction} from "../../../../shared/interfaces/budget.js";
+import {ITransaction} from "../../../shared/interfaces/budget.js";
 
 //Create a sub-schema 
 const transactionSchema = new Schema<ITransaction>({

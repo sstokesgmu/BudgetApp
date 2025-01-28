@@ -4,7 +4,7 @@ import session from "express-session";
 import path from "path";
 import ConnectToDB from "./db.js";
 import BucketModel from "./apis/appApi/models/transactions.js";
-import transaction_seed from './seed.js';
+import transaction_seed from './tools/seed.js';
 
 
 //? https://stackoverflow.com/questions/64383909/dirname-is-not-defined-error-in-node-js-14-version

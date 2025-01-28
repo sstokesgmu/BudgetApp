@@ -1,5 +1,5 @@
 import {Model, Schema, model as createModel} from "mongoose"
-import  {IUser} from "../../../../shared/interfaces/budget.js";
+import  {IUser} from "../../../shared/interfaces/budget.js";
 
 const userSchema = new Schema<IUser>({
     name: {type:String, required:true},

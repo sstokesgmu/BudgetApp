@@ -18,6 +18,11 @@ router.get("/", async (_:Request, res:Response) => {
     }
 });
 
+
+//Todo: two patches for adding a transaction bucket obj id and antoher for updating the current balance
+//router.patch
+
+
 // router.patch("/balance/:accountId", async (req: Request, res:Response) => {
 //     const account = await AccountModel.findOne({"account_id" : req.params.accountId});
 //     const appliedBucket = await BucketModel.find({"account_id" : req.params.accountId});
