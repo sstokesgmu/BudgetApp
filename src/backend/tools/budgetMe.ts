@@ -42,6 +42,44 @@ export namespace BudgetApp {
         }
     });
     
+    type AccountParams = number | number[] | IAccount | IAccount[]; 
+        
+    export async function CreateAccount(param:AccountParams){
+        //Type guards 
+        let a = "this is an";
+        // If 
+        if(Array.isArray(param)){
+            a += "array";
+            let element = param[0];
+            if(isFilledAccount(element)){
+                a += "of IAccount objects"
+                console.log(a);
+                console.log(param);
+            }
+            else {
+                a += "of numbers";
+                console.log(a);
+                console.log(param);
+            }
+        }
+        else {
+            a += "single";
+            if(isFilledAccount(param)){
+                a += "object type IAccounts"
+                console.log(a);
+                console.log(param);
+            }
+            else {
+                a += "number"
+                console.log(a);
+                console.log(param);
+            }
+        }            
+    }
+    
+    function isFilledAccount(a: Number| IAccount): a is IAccount{
+        return typeof a === "object" 
+
     
 
         //else it is object or array of objects then we can save it to the db 
