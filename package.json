@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon dist/backend/server.js",
     "dev": "ts-node src/server.ts",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.json",
     "build:backend": "tsc --project tsconfig.backend.json"
   },
   "keywords": [],
@@ -16,8 +16,6 @@
   "description": "",
   "dependencies": {
     "@types/express-session": "^1.18.1",
-    "@types/plaid-link": "^2.0.15",
-    "chart.js": "^4.4.7",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-session": "^1.18.1",

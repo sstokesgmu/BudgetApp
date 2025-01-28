@@ -74,12 +74,13 @@ router.patch("/del/:accountId", async(req:Request, res:Response) => {
  */
 async function createAccount (id:number, accountType:string, startNumber:number) {
     const data:IAccount = {
-        account_id : id,
+        account_number : id,
         type: accountType,
         date_opened: new Date(Date.now()),
         date_closed: null,
         starting_amount: startNumber,
         current_amount: startNumber,
+        bucket :null,
     }
     try {
         const account = new AccountModel(data);

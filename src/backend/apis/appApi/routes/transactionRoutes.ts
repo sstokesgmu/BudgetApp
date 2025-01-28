@@ -1,17 +1,27 @@
 import express, { Request, Response } from "express";
+import {Types} from 'mongoose';
 import BucketModel from "../models/transactions.js";
 import {ITransaction, ITransaction_Bucket } from "../../../../shared/interfaces/budget.js";
 
 const router: any = express.Router();
 
+
+
 /** 
  * @param {string} - route endpoint
  * @param {Request} 
  * @param {Response} 
- * @callback => Finds all transaction documents that match the given account id 
+ * @callback => Finds all transaction buckets that match the given account id or if the query 
+ * parameters is provided _id=string then we will get a single transaction bucket 
 */
 router.get("/:accountId",  async (req: Request, res: Response) => {
-    const result = await BucketModel.find({account_id: req.params.accountId});
+    const id = new Types.ObjectId(req.query._id as string)
+    const result = await BucketModel.find({
+        account_id: req.params.accountId, 
+        ...(id ? {_id:id}:{})} //https://www.youtube.com/watch?v=abIJLkqh6PI 
+        //https://www.mongodb.com/docs/manual/reference/bson-types/#objectid
+        //https://mongoosejs.com/docs/schematypes.html#objectids
+      );
     try {
       res.status(200).send(result);
     } catch (error) {
@@ -20,12 +30,15 @@ router.get("/:accountId",  async (req: Request, res: Response) => {
   },
 );
 
+
+
 /** 
  * @param {string} - route endpoint
  * @param {Request} 
  * @param {Response} 
  * @callback => Add a transaction to an current transaction bucket or create a new transaction bucket
 */
+
 router.post("/add/:accountid", async (req: Request, res: Response) => {
   const transactionObj: ITransaction = {
     date: new Date(Date.now()),
