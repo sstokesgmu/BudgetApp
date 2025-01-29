@@ -2,6 +2,8 @@ import express, { Request, Response, Application} from "express";
 import dotenv from "dotenv";
 import session from "express-session";
 import path from "path";
+
+import cors from 'cors';
 import ConnectToDB from "./db.js";
 import BucketModel from "./apis/appApi/models/transactions.js";
 
@@ -31,8 +33,8 @@ const app: Application = express();
 //Parse int returns a string, we don't know if the user is going to define a port so we default the value if
 //the left side is null
 const PORT: number = parseInt(process.env.PORT ?? "4000", 10);
-
-// declare module "express-session" {
+app.use(cors());
+// declare module ["express-session" {
 //   interface SessionData {
 //     access_token?: string;
 //   }

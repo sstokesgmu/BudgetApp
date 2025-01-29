@@ -16,7 +16,8 @@ const router:Router = express.Router();
 router.get("/", async ( _:Request , res:Response) => {
     const user = await UserModel.find({});
     try {
-        res.send(user);
+        console.log("Get user request from client");
+        res.status(200).send(user);
     } catch (error) {
         res.status(500).send(error);
     }
