@@ -19,7 +19,7 @@ export namespace BudgetApp {
   //Todo: Add valiadation to make sure the resquest has admin privliges to seed data
   router.patch("/seed/accounts", async (req: Request, res: Response) => {
   //Todo: We can use req.body to check a different user
-    const data = account_seed_full;
+    const data = account_seed;
     try {
       const ids = await UnpackAccountIds(data, ValidateAccount(data));
       const result = await UserModel.findOneAndUpdate(
@@ -149,6 +149,19 @@ export namespace BudgetApp {
      });
   }
 
+  export async function DeleteAccounts(a:string):Promise<any>{
+    let b = await fetch(`http://localhost:${process.env.PORT}/api/accounts?account_nums=${a}`,
+      {
+        method:"DELETE",
+        headers: {
+          "Content-Type":"application/json",
+        }
+      }
+    );
+    console.log(`b is:${JSON.stringify(b)}`)
+    return b;
+  }
+
   //else it is object or array of objects then we can save it to the db
 
   //     // Promise.all([
@@ -162,7 +175,4 @@ export namespace BudgetApp {
 
   // }
 
-  export async function DeleteAccount(account_num: number | number[]) {
-    
-  }
 }

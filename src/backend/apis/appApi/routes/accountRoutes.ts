@@ -40,6 +40,12 @@ router.post('/', async(req:Request,res:Response) => {
     }
 });
 
+router.delete('/', async(req:Request, res:Response) => {
+    const accountsArray = (req.query.account_nums as string).split(',').map(account => parseInt(account))
+    console.log("Inside the delete route");
+    const result = await AccountModel.deleteMany({account_num: {$in: accountsArray}})
+    res.status(200).send(result)
+});
 //Todo: two patches for adding a transaction bucket obj id and antoher for updating the current balance
 //router.patch
 

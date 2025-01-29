@@ -59,17 +59,28 @@ router.post("/create", async(req:Request, res:Response) => {
  * @callback => will queries to see if a document of model user has an accounts array of @type {number} exists
  * Then we pull (remove) the an account from the array   
 */
-router.patch("/del/:accountId", async(req:Request, res:Response) => {
+router.patch("/del", async(req:Request, res:Response) => {
     try {
-        const result = await UserModel.findOneAndUpdate(
-            {"accounts": req.params.accountId},
-            {$pull: {"accounts": req.params.accountId}},
-            {new: false}
-        ).exec();
 
         
+        const accountsArray = (req.query.accounts as string).split(',').map(account => parseInt(account))
 
+        const result = await UserModel.updateMany(
+            {"accounts": {$in:accountsArray}},
+            {$pull:{"accounts": {$in:accountsArray}}}
+        ).exec()    
 
+        // await UserModel.updateMany(
+        //     {"accounts": {$in: req.params.accounts}},
+        //     {$pull: {"accounts":{ $in:req.params.accounts}}},
+        //     {
+        //         new: false,
+        //         projection: ({_id:0,name:0})
+        //     }
+        // ).exec();
+
+        
+        const res_data = BudgetApp.DeleteAccounts(req.query.accounts as string);
         res.status(200).send(result);
     } catch(error) {
         res.status(500).send(error);
