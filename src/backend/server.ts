@@ -7,6 +7,7 @@ import BucketModel from "./apis/appApi/models/transactions.js";
 
 
 
+
 //? https://stackoverflow.com/questions/64383909/dirname-is-not-defined-error-in-node-js-14-version
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -21,6 +22,7 @@ const __dirname = dirname(__filename);
 import accountRoutes from "./apis/appApi/routes/accountRoutes.js";
 import userRoutes  from "./apis/appApi/routes/userRoutes.js";
 import trans_Routes from "./apis/appApi/routes/transactionRoutes.js";
+import {BudgetApp} from './tools/budgetMe.js'
 
 
 ConnectToDB(); 
@@ -41,6 +43,7 @@ app.use(express.json()); //TODO: Notes=> https://www.geeksforgeeks.org/express-j
 app.use("/api/users", userRoutes);
 app.use("/api/accounts", accountRoutes);
 app.use("/api/transactions", trans_Routes);
+app.use(BudgetApp.router);
 
 //Send all the frontend files to the middleware, change the url to access othe html files 
 app.use(express.static(path.join(__dirname, "../frontend")));
@@ -75,7 +78,7 @@ console.log(path.join(__dirname, "../shared"));
 //   } catch (error) {
 //     console.log(`Something went wrong loading seed data: ${error}`)
 //   }
-})
+//})
 
 //Adding 0.0.0.0 Makes the this interfaces on the LAN makes it on the public 
 //network

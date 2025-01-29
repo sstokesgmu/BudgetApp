@@ -2,6 +2,7 @@ import express, {Request, Response, Router} from "express";
 import UserModel from "../models/user.js";
 import { IAccount } from "../../../shared/interfaces/budget.js";
 import AccountModel from "../models/account.js";
+import {BudgetApp} from '../../../tools/budgetMe.js'
 
 //create mini app
 const router:Router = express.Router();
@@ -28,19 +29,24 @@ router.get("/", async ( _:Request , res:Response) => {
  * @callback => will queries to see if a document of model user has an accounts array of @type {number} exists
  * Then we push (add) the new account id to the array   
 */
-router.post("/create/:accountId", async(req:Request, res:Response) => {
-    // const { accountId } = req.params;
+router.post("/create", async(req:Request, res:Response) => {
     // const { accountType, amount} = req.body
-    
-    //Todo: for each account id add the array
-
-
+    const {account} = req.body.account;
     try {
-        console.log(req.body.params)
+        const ids = BudgetApp.UnpackAccountIds(account, BudgetApp.ValidateAccount(account));
+        const result = await UserModel.findOneAndUpdate(
+            {'accounts': {$exists: true, $type: 'array'}},
+            {$push: {ids}},
+            {new:true}
+        ).exec()
+
+
+        
+        
         //Todo: call CreateAccount(req.body.?account)
         // const result = await UserModel.findOneAndUpdate(
         //     {"accounts": {$exists: true, $type: "array"}},
-        //     {$push: {"accounts": accountId}},
+        //     {$push: {"accounts": account.id}},
         //     {new: true}
         // ).exec()
        // await createAccount(parseInt(accountId), accountType, amount);

@@ -45,7 +45,7 @@ router.get("/:accountId",  async (req: Request, res: Response) => {
  * @callback => Add a transaction to an current transaction bucket or create a new transaction bucket
 */
 
-router.post("/add/:accountid", async (req: Request, res: Response) => {
+router.post("/add/:accountId", async (req: Request, res: Response) => {
   const transactionObj: ITransaction = {
     date: new Date(Date.now()),
     amount: req.body?.amount,
@@ -70,7 +70,7 @@ router.post("/add/:accountid", async (req: Request, res: Response) => {
         1. does the account number in the data set match the account number of the transaction 
         2. does the data set have a bucket that is within the time frame
        */
-      const doesDocExist = await BucketModel.findOne({"account_id": transactionObj.account,
+      const doesDocExist = await BucketModel.findOne({"account_id": req.params.accountId,
                 "start_date": {"$lte":transactionObj.date}, "end_date": {"$gte":transactionObj.date}
       });
       if(doesDocExist)

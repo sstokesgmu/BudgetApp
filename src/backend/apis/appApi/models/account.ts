@@ -4,11 +4,11 @@ import {ObjectId} from 'mongodb'
 // Create a Schema correspondoing to the document interface
 const accountSchema = new Schema<IAccount>({
     account_num: {type: Number, required:true, unique: true},
-    type: {type: String, required: true},
-    date_opened: {type: Date, required: true},
+    type: {type: String, default: null},
+    date_opened: {type: Date, default:null},
     date_closed: {type: Date, default:null},
-    starting_amount: {type: Number, required: true},
-    current_amount: {type: Number, required: true},
+    starting_amount: {type: Number, default:null},
+    current_amount: {type: Number, default:null},
     bucket:{type: [ObjectId], default:null}
 });
 

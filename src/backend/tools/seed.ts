@@ -1,7 +1,7 @@
 import { ITransaction, IAccount } from "../shared/interfaces/budget"
 
-export const account_seed:Number = 123
-export const accounts_seed:Number[] = [456,789]
+export const account_seed:number = 123
+export const accounts_seed:number[] = [456,789]
 export const account_seed_full:IAccount = {
     account_num:123,
     type: "savings",
@@ -22,7 +22,7 @@ export const accounts_seed_full: IAccount[] = [
         bucket:null
     },
     {
-        account_num:456,
+        account_num:789,
         type: "Savings",
         date_opened: new Date(Date.now()),
         date_closed: null,
