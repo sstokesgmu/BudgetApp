@@ -7,13 +7,13 @@ export interface IUser {
     accounts: number[],
 }
 export interface IAccount {
-    account_num: number,
-    type?: string, 
-    date_opened?: Date,
-    date_closed?: Date | null, 
-    starting_amount?: number, 
-    current_amount?: number | null,
-    bucket?: ObjectId[] | null,
+    account_num: number|null,
+    type: string | null, 
+    date_opened: Date,
+    date_closed: Date | null, 
+    starting_amount: number|null, 
+    current_amount: number | null,
+    bucket: ObjectId[] | null,
 }
 
 export interface ITransaction_Bucket extends Document {

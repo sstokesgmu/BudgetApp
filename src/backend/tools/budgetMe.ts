@@ -32,26 +32,28 @@ export namespace BudgetApp {
       res.status(500).send(error);
     }
   });
-  router.post(
-    "/seed/transactions/:accountId",
-    async (req: Request, res: Response) => {
-      try {
-        const result = await BucketModel.findOneAndUpdate(
-          { account_num: req.params.accountId },
-          { $push: { transactions: transaction_seed } },
-          { new: true }
-        );
-        if (!result)
-          throw new Error(
-            `There is no account with the value of ${req.params.accountId}`
-          );
 
-        res.status(200).send(result);
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  );
+
+//   router.post(
+//     "/seed/transactions/:accountId",
+//     async (req: Request, res: Response) => {
+//       try {
+//         const result = await BucketModel.findOneAndUpdate(
+//           { account_num: req.params.accountId },
+//           { $push: { transactions: transaction_seed } },
+//           { new: true }
+//         );
+//         if (!result)
+//           throw new Error(
+//             `There is no account with the value of ${req.params.accountId}`
+//           );
+
+//         res.status(200).send(result);
+//       } catch (e) {
+//         console.error(e);
+//       }
+//     }
+//   );
 
   type AccountParams = number | number[] | IAccount | IAccount[];
   enum ValidationResult {
@@ -90,27 +92,54 @@ export namespace BudgetApp {
       }
     }
   }
-  export function UnpackAccountIds(
-    params: AccountParams,
-    code: ValidationResult
-  ) {
+  export function UnpackAccountIds(params: AccountParams, code: ValidationResult){
     //number|number[]
+    let result:AccountParams;
     switch (code) {
       case 0:
+        result = CreateAccount({account_num:params} as IAccount);
+        console.log(result);
         return params as number;
       case 1:
+        result = CreateAccount(params as IAccount);
+        console.log(result);
         return (params as IAccount).account_num;
       case 2:
+        const accounts = (params as number[]).map(id => ({account_num: id} as IAccount));
+        result = accounts.map(account => CreateAccount(account))
+        console.log(result);
         return params as number[];
       case 3:
+        result = []; 
         const ids = (params as IAccount[]).map(
-          (element) => element.account_num
+          (element) => 
+          {
+            element.current_amount = element.starting_amount;
+            (result as IAccount[]).push(CreateAccount(element));
+
+            return element.account_num
+          }
         );
+        console.log(result);
         return ids;
     }
   }
   function isFilledAccount(a: Number | IAccount): a is IAccount {
     return typeof a === "object" && "account_num" in a;
+  }
+
+
+  function CreateAccount(param:Partial<IAccount>):IAccount{
+    const template:IAccount = {
+        account_num: null,
+        type: null,
+        date_opened: new Date(Date.now()),
+        date_closed: null,
+        starting_amount:null,
+        current_amount: null, 
+        bucket:null
+    }
+    return Object.assign(template,param);
   }
 
   //else it is object or array of objects then we can save it to the db
