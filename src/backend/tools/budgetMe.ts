@@ -1,5 +1,6 @@
 import { IAccount } from "../shared/interfaces/budget.js";
 import express, { Request, Response, Router } from "express";
+import dotenv from 'dotenv'
 import BucketModel from "../apis/appApi/models/transactions.js";
 import {
   account_seed,
@@ -11,21 +12,20 @@ import {
 import AccountModel from "../apis/appApi/models/account.js";
 import UserModel from "../apis/appApi/models/user.js";
 
+dotenv.config();
+
 export namespace BudgetApp {
   export const router: Router = express.Router();
-  //seed routes //Todo: Add valiadation to make sure the resquest has admin privliges to seed data
-  router.post("/seed/accounts", async (req: Request, res: Response) => {
-    //Todo: We can use req.body to check a different user
-    const data = accounts_seed_full;
+  //Todo: Add valiadation to make sure the resquest has admin privliges to seed data
+  router.patch("/seed/accounts", async (req: Request, res: Response) => {
+  //Todo: We can use req.body to check a different user
+    const data = account_seed_full;
     try {
-      const ids = UnpackAccountIds(
-        data, ValidateAccount(data)
-      );
-      console.log(ids);
+      const ids = await UnpackAccountIds(data, ValidateAccount(data));
       const result = await UserModel.findOneAndUpdate(
-        { accounts: { $exists: true, $type: "array" }, name: "John Doe" },
-        { $push: { 'accounts': ids } },
-        { new: true }
+        {accounts:{$exists: true, $type: "array"}, name: "John Doe"},
+        {$push: { 'accounts': ids }},
+        {new: true}
       ).exec();
       res.status(200).send(result);
     } catch (error) {
@@ -62,7 +62,6 @@ export namespace BudgetApp {
     ARRAY_NUMBERS = 2,
     ARRAY_ACCOUNTS = 3,
   }
-
   export function ValidateAccount(param: AccountParams): ValidationResult {
     //Type guards
     let a = "this is an";
@@ -92,43 +91,41 @@ export namespace BudgetApp {
       }
     }
   }
-  export function UnpackAccountIds(params: AccountParams, code: ValidationResult){
+  export async function UnpackAccountIds(params: AccountParams, code: ValidationResult){
     //number|number[]
-    let result:AccountParams;
+    let account:AccountParams;
     switch (code) {
       case 0:
-        result = CreateAccount({account_num:params} as IAccount);
-        console.log(result);
+        account = CreateAccount({account_num:params} as IAccount);
+        await InsertAccount(`http://localhost:${process.env.PORT}/api/accounts`,account);
         return params as number;
       case 1:
-        result = CreateAccount(params as IAccount);
-        console.log(result);
+        account = CreateAccount(params as IAccount);
+        account.current_amount = account.starting_amount;
+        await InsertAccount(`http://localhost:${process.env.PORT}/api/accounts`,account);
         return (params as IAccount).account_num;
       case 2:
         const accounts = (params as number[]).map(id => ({account_num: id} as IAccount));
-        result = accounts.map(account => CreateAccount(account))
-        console.log(result);
+        account = accounts.map(account => CreateAccount(account))
+        await InsertAccount(`http://localhost:${process.env.PORT}/api/accounts`,account);
         return params as number[];
       case 3:
-        result = []; 
+        account = []; 
         const ids = (params as IAccount[]).map(
           (element) => 
           {
             element.current_amount = element.starting_amount;
-            (result as IAccount[]).push(CreateAccount(element));
-
+            (account as IAccount[]).push(CreateAccount(element));
             return element.account_num
           }
         );
-        console.log(result);
+        await InsertAccount(`http://localhost:${process.env.PORT}/api/accounts`,account);
         return ids;
     }
   }
   function isFilledAccount(a: Number | IAccount): a is IAccount {
     return typeof a === "object" && "account_num" in a;
   }
-
-
   function CreateAccount(param:Partial<IAccount>):IAccount{
     const template:IAccount = {
         account_num: null,
@@ -140,6 +137,16 @@ export namespace BudgetApp {
         bucket:null
     }
     return Object.assign(template,param);
+  }
+  async function InsertAccount(route:string,data:IAccount|IAccount[]): Promise<void> {
+    await fetch(route,
+      {
+       method:"POST",
+       headers: {
+         "Content-Type":"application/json",
+       },
+       body: JSON.stringify(data),
+     });
   }
 
   //else it is object or array of objects then we can save it to the db
@@ -156,11 +163,6 @@ export namespace BudgetApp {
   // }
 
   export async function DeleteAccount(account_num: number | number[]) {
-    Promise.all([
-      await fetch("/api/accounts/del", {
-        method: "Patch",
-        headers: { "Content-Type": "application/json" },
-      }).then((res) => res.json()),
-    ]);
+    
   }
 }

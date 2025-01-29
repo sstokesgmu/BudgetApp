@@ -18,6 +18,27 @@ router.get("/", async (_:Request, res:Response) => {
     }
 });
 
+router.post('/', async(req:Request,res:Response) => {
+    const data = req.body;
+    try {
+        let result;
+        if(!Array.isArray(data))
+        {
+            console.log("data is not an array");
+            result = new AccountModel(data);
+            await result.save();
+        }
+        else
+        {
+            console.log("data is an array");
+            result = await AccountModel.insertMany(data)
+        }
+        console.log(`Account data inserted successfully: ${result}`)
+        res.status(200).send(result);
+    } catch (e) {
+        console.error(e);
+    }
+});
 
 //Todo: two patches for adding a transaction bucket obj id and antoher for updating the current balance
 //router.patch

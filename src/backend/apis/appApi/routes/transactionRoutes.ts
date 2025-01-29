@@ -4,9 +4,6 @@ import BucketModel from "../models/transactions.js";
 import {ITransaction, ITransaction_Bucket } from "../../../shared/interfaces/budget.js";
 
 const router: any = express.Router();
-
-
-
 /** 
  * @param {string} - route endpoint
  * @param {Request} 
@@ -24,9 +21,7 @@ router.get("/:accountId",  async (req: Request, res: Response) => {
     }
     const result = await BucketModel.find({
         account_id: req.params.accountId, 
-        ...(id ? {_id:id}:{})} //https://www.youtube.com/watch?v=abIJLkqh6PI 
-        //https://www.mongodb.com/docs/manual/reference/bson-types/#objectid
-        //https://mongoosejs.com/docs/schematypes.html#objectids
+        ...(id ? {_id:id}:{})}
       );
     try {
       res.status(200).send(result);
@@ -76,8 +71,7 @@ router.post("/add/:accountId", async (req: Request, res: Response) => {
       if(doesDocExist)
       {
         const result = await doesDocExist.updateOne({$push: {transactions: transactionObj}});
-        res.status(200).send(`The response is okay: ${result}`);
-        
+        res.status(200).send(`The response is okay: ${result}`);   
       } else {
         //Create a new document
         const result = CreateModel(transactionObj);
@@ -119,7 +113,6 @@ function CreateEndDate(startDate:Date):Date {
 }
 
 /**
- * 
  * @param transaction 
  * @param trans_bucket 
  * @returns a new compiled Bucket model where the first element of the transaction array is the transaction 

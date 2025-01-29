@@ -39,10 +39,6 @@ router.post("/create", async(req:Request, res:Response) => {
             {$push: {ids}},
             {new:true}
         ).exec()
-
-
-        
-        
         //Todo: call CreateAccount(req.body.?account)
         // const result = await UserModel.findOneAndUpdate(
         //     {"accounts": {$exists: true, $type: "array"}},
@@ -68,8 +64,12 @@ router.patch("/del/:accountId", async(req:Request, res:Response) => {
         const result = await UserModel.findOneAndUpdate(
             {"accounts": req.params.accountId},
             {$pull: {"accounts": req.params.accountId}},
-            {new: true}
+            {new: false}
         ).exec();
+
+        
+
+
         res.status(200).send(result);
     } catch(error) {
         res.status(500).send(error);
@@ -77,29 +77,29 @@ router.patch("/del/:accountId", async(req:Request, res:Response) => {
 });
 
 
-/**
- * 
- * @param id  - the account id 
- * @param accountType  - the type of the account 
- * @param startNumber  - the starting amount of the account 
- * @function - This function creates a new account model and saves it to the database collection
- */
-async function createAccount (id:number, accountType:string, startNumber:number) {
-    const data:IAccount = {
-        account_num : id,
-        type: accountType,
-        date_opened: new Date(Date.now()),
-        date_closed: null,
-        starting_amount: startNumber,
-        current_amount: startNumber,
-        bucket :null,
-    }
-    try {
-        const account = new AccountModel(data);
-        await account.save();
-        console.log(`Account created successfully: ${account}`)
-    } catch (error) {
-        console.error(error);
-    }
-}
+// /**
+//  * 
+//  * @param id  - the account id 
+//  * @param accountType  - the type of the account 
+//  * @param startNumber  - the starting amount of the account 
+//  * @function - This function creates a new account model and saves it to the database collection
+//  */
+// async function createAccount (id:number, accountType:string, startNumber:number) {
+//     const data:IAccount = {
+//         account_num : id,
+//         type: accountType,
+//         date_opened: new Date(Date.now()),
+//         date_closed: null,
+//         starting_amount: startNumber,
+//         current_amount: startNumber,
+//         bucket :null,
+//     }
+//     try {
+//         const account = new AccountModel(data);
+//         await account.save();
+//         console.log(`Account created successfully: ${account}`)
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
 export default router;
