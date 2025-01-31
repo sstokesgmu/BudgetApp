@@ -32,6 +32,7 @@ router.post('/', async(req:Request,res:Response) => {
         let result;
         if(!Array.isArray(data))
         {
+            console.log(data);
             console.log("data recieved is not an array");
             result = new AccountModel(data);
             await result.save();
@@ -48,7 +49,7 @@ router.post('/', async(req:Request,res:Response) => {
     }
 });
 
-router.patch('update-type/:accountId', async(req:Request, res:Response) => {
+router.patch('/update-type/:accountId', async(req:Request, res:Response) => {
     const id:string = req.params.accountId;
     const accountType:string = req.body.accountType;
 
@@ -60,7 +61,7 @@ router.patch('update-type/:accountId', async(req:Request, res:Response) => {
     res.status(200).send(result);
 });
 
-router.patch('update-balance/:accountId', async(req:Request, res:Response) => {
+router.patch('/update-balance/:accountId', async(req:Request, res:Response) => {
     const id:string = req.params.accountId;
     const balance:number = req.body.balance; 
 

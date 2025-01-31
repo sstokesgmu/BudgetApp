@@ -110,12 +110,13 @@ export namespace BudgetApp {
 
   //Take the partial data from the parameter and replace the data in this template object
   function CreateAccount(param:Partial<IAccount>):IAccount{
+    console.log(param);
     const template:IAccount = {
         account_num: null,
         type: null,
         date_opened: new Date(Date.now()),
         date_closed: null,
-        starting_amount:null,
+        starting_amount:0,
         current_amount: null, 
         bucket:null
     }
@@ -150,14 +151,13 @@ export namespace BudgetApp {
     const transaction:ITransaction = {
       date: new Date(Date.now()),
       amount: obj.amount,
-      trans_type: obj.type,
-      comp_name:obj.company,
+      trans_type: obj.trans_type,
+      comp_name:obj.comp_name,
       status: 'pending'
     }
     return transaction
   }
   export function CreateBucket(transaction:ITransaction,accountId:number):Partial<ITransaction_Bucket>{
-    console.log(transaction);
     let array: ITransaction[] = [transaction];
     const bucket:Partial<ITransaction_Bucket> = {
       account_id: accountId,
@@ -177,7 +177,7 @@ export namespace BudgetApp {
  */
 function CreateEndDate(startDate: Date): Date {
   let date = new Date(startDate);
-  date.setDate(date.getDay() + 14);
+  date.setDate(date.getDate() + 14);
   return date;
 }
 
@@ -185,6 +185,7 @@ function CreateEndDate(startDate: Date): Date {
   export async function UpdateBucket(transaction:ITransaction, objectid:string, operation:string):Promise<any>{
     try {
       let response:any;
+      console.log(transaction);
       if(operation === "push"){
         //send request
        response = await fetch(`http://localhost:${process.env.PORT}/api/transactions/push/${objectid}`,

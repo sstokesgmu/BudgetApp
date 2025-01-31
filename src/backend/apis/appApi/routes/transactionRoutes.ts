@@ -58,7 +58,7 @@ router.post("/add/:accountId", async (req: Request, res: Response) => {
   //   status: "pending",
   // };
   try {
-    const transaction = BudgetApp.CreateTransaction(req.body);
+    const transaction = BudgetApp.CreateTransaction(req.body.transaction);
 
     const query = {
       account_id: req.params.accountId,
@@ -68,6 +68,7 @@ router.post("/add/:accountId", async (req: Request, res: Response) => {
     const doc = await BudgetApp.DoesBucketExist(query);
     //Update bucket with the new transaction information
     if (doc) {
+      console.log(doc._id);
       const result = await BudgetApp.UpdateBucket(transaction,doc._id, "push");
       res.status(200).send(`The response is okay: ${result}`);
     } else {
@@ -120,9 +121,9 @@ router.post("/add/:accountId", async (req: Request, res: Response) => {
 
 router.patch("/push/:id", async (req: Request, res: Response) => {
   try {
-    const id = new Types.ObjectId(req.params.id as string);
+    const id = req.params.id;
     const result = await BucketModel.findByIdAndUpdate(id,
-      { $push: { transactions: req.body.transaction } },
+      { $push: { transactions: req.body} },
       { new: true }
     ).exec();
     res.status(200).send(result);
@@ -133,10 +134,11 @@ router.patch("/push/:id", async (req: Request, res: Response) => {
 
 router.patch("/pull/:id", async (req: Request, res: Response) => {
   try {
-    const id = new Types.ObjectId(req.params.id as string);
+    const id = req.params.id;
+    console.log(req.body);
     const result: any = await BucketModel.findByIdAndUpdate(
       id,
-      { $pull: { transactions: req.body.data } },
+      { $pull: {transactions:req.body}},
       { new: true }
     ).exec();
     if (!result) throw new Error("This is not the right bucket");

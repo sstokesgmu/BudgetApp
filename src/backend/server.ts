@@ -47,6 +47,7 @@ app.use("/api/accounts", accountRoutes);
 app.use("/api/transactions", trans_Routes);
 app.use(BudgetApp.router);
 
+
 //Send all the frontend files to the middleware, change the url to access othe html files 
 app.use(express.static(path.join(__dirname, "../frontend")));
 app.use(express.static(path.join(__dirname, "../shared")));

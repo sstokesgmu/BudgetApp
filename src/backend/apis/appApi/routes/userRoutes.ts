@@ -6,7 +6,6 @@ import {BudgetApp} from '../../../tools/budgetMe.js'
 
 //create mini app
 const router:Router = express.Router();
-
 /** 
  * @param {string} - / refers to the root
  * @param {Request} 
@@ -30,16 +29,19 @@ router.get("/", async ( _:Request , res:Response) => {
  * @callback => will queries to see if a document of model user has an accounts array of @type {number} exists
  * Then we push (add) the new account id to the array   
 */
-router.post("/create/accounts", async(req:Request, res:Response) => {
-    const {account} = req.body.account;
+router.patch("/create/accounts", async(req:Request, res:Response) => {
+    
+    const account = req.body.account;
+    console.log(account);
     try {
-        const ids = BudgetApp.UnpackAccountIds(account, BudgetApp.ValidateAccount(account));
+        const ids = await BudgetApp.UnpackAccountIds(account, BudgetApp.ValidateAccount(account));
+        console.log(ids);
         const result = await UserModel.findOneAndUpdate(
-            {'accounts': {$exists: true, $type: 'array'}},
-            {$push: {ids}},
+            {'accounts': {$exists: true, $type: 'array'},  name: "John Doe"},
+            {$push: {accounts:ids}},
             {new:true}
         ).exec()
-        res.status(200).send("okay");
+        res.status(200).send(result);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -52,7 +54,7 @@ router.post("/create/accounts", async(req:Request, res:Response) => {
  * @callback => will queries to see if a document of model user has an accounts array of @type {number} exists
  * Then we pull (remove) the an account from the array   
 */
-
+33
 //? localhost:8080/api/uses/del?accounts=123,456,789
 router.patch("/del/accounts", async(req:Request, res:Response) => {
     try {      
@@ -68,31 +70,4 @@ router.patch("/del/accounts", async(req:Request, res:Response) => {
         res.status(500).send(error);
     }
 });
-
-
-// /**
-//  * 
-//  * @param id  - the account id 
-//  * @param accountType  - the type of the account 
-//  * @param startNumber  - the starting amount of the account 
-//  * @function - This function creates a new account model and saves it to the database collection
-//  */
-// async function createAccount (id:number, accountType:string, startNumber:number) {
-//     const data:IAccount = {
-//         account_num : id,
-//         type: accountType,
-//         date_opened: new Date(Date.now()),
-//         date_closed: null,
-//         starting_amount: startNumber,
-//         current_amount: startNumber,
-//         bucket :null,
-//     }
-//     try {
-//         const account = new AccountModel(data);
-//         await account.save();
-//         console.log(`Account created successfully: ${account}`)
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
 export default router;
