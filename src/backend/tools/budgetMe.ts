@@ -1,4 +1,4 @@
-import { IAccount } from "../shared/interfaces/budget.js";
+import { IAccount, ITransaction, ITransaction_Bucket } from "../shared/interfaces/budget.js";
 import express, { Request, Response, Router } from "express";
 import dotenv from 'dotenv'
 import BucketModel from "../apis/appApi/models/transactions.js";
@@ -32,28 +32,6 @@ export namespace BudgetApp {
       res.status(500).send(error);
     }
   });
-
-
-//   router.post(
-//     "/seed/transactions/:accountId",
-//     async (req: Request, res: Response) => {
-//       try {
-//         const result = await BucketModel.findOneAndUpdate(
-//           { account_num: req.params.accountId },
-//           { $push: { transactions: transaction_seed } },
-//           { new: true }
-//         );
-//         if (!result)
-//           throw new Error(
-//             `There is no account with the value of ${req.params.accountId}`
-//           );
-
-//         res.status(200).send(result);
-//       } catch (e) {
-//         console.error(e);
-//       }
-//     }
-//   );
 
   type AccountParams = number | number[] | IAccount | IAccount[];
   enum ValidationResult {
@@ -162,17 +140,67 @@ export namespace BudgetApp {
     return b;
   }
 
-  //else it is object or array of objects then we can save it to the db
-
-  //     // Promise.all([
-  //        let res =  await fetch('/api/accounts/create', {
-  //             method:"POST",
-  //             headers:{"Content-Type": "application/json"},
-  //             body: JSON.stringify(account_var)
-  //         }).then(res => res.json())
-  //         console.log(res);
-  //     // ])
-
-  // }
-
+  export function CreateTransaction(obj:any):ITransaction{
+    console.log(obj);
+    const transaction:ITransaction = {
+      date: new Date(Date.now()),
+      amount: obj.amount,
+      trans_type: obj.type,
+      comp_name:obj.company,
+      status: 'pending'
+    }
+    return transaction
+  }
+  export function CreateBucket(transaction:ITransaction,accountId:number):Partial<ITransaction_Bucket>{
+    console.log(transaction);
+    let array: ITransaction[] = [transaction];
+    const bucket:Partial<ITransaction_Bucket> = {
+      account_id: accountId,
+      start_date: transaction.date,
+      end_date: CreateEndDate(transaction.date),
+      transactions: array,
+    }
+    return bucket;
+  }
+  export async function DoesBucketExist(query:object):Promise<any>{
+    const doc = await BucketModel.findOne(query);
+    return doc;
+  }
+  /**
+ * @param startDate
+ * @returns a new date 14 days after the start date
+ */
+function CreateEndDate(startDate: Date): Date {
+  let date = new Date(startDate);
+  date.setDate(date.getDay() + 14);
+  return date;
 }
+
+
+  export async function UpdateBucket(transaction:ITransaction, objectid:string, operation:string):Promise<any>{
+    try {
+      let response:any;
+      if(operation === "push"){
+        //send request
+       response = await fetch(`http://localhost:${process.env.PORT}/api/transactions/push/${objectid}`,
+        {
+          method:"PATCH",
+          headers: {'Content-Type':'application/json',},
+          body: JSON.stringify(transaction)
+        });
+      }
+      else {
+        response = await fetch(`http://localhost:${process.env.PORT}/api/transactions/pull/${objectid}`),
+        {
+          method:"PATCH",
+          headers: {'Content-Type':'application/json',},
+          body: JSON.stringify(transaction)
+        }
+      }
+      return response;
+    } catch(e){
+      console.error(e);
+    }
+  }
+}
+
