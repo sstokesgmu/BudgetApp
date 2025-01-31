@@ -11,7 +11,9 @@ const router: any = express.Router();
  * @callback => Finds all transaction buckets that match the given account id or if the query 
  * parameters is provided _id=string then we will get a single transaction bucket 
 */
+//localhost:8080/api/transactions/123?_id=ObjectId&fields=accounts
 router.get("/:accountId",  async (req: Request, res: Response) => {
+  try {
     let id;
     if(!req.query._id)
       console.log("Selecting all transaction buckets")
@@ -19,16 +21,22 @@ router.get("/:accountId",  async (req: Request, res: Response) => {
       id = new Types.ObjectId(req.query._id as string)
       console.log("Selecting one transaction bucket that matches an object id");
     }
-    const result = await BucketModel.find({
-        account_id: req.params.accountId, 
-        ...(id ? {_id:id}:{})}
-      );
-    try {
+
+
+      //Get the fields query parameter, if provided
+      const fields = req.query.fields ? 
+      (req.query.fields as string).split(',').join(' ') 
+      : '';
+
+    const query = {account_id: req.params.accountId, 
+                              ...(id ? {_id:id}:{})}
+    const result = await BucketModel.find(query,fields);
+ 
       res.status(200).send(result);
     } catch (error) {
       res.status(500).send(error);
     }
-  },
+  }
 );
 
 
@@ -50,7 +58,7 @@ router.post("/add/:accountId", async (req: Request, res: Response) => {
   };
   try {
   /**
-   * @var exist - will indicate if the account exist in the collection
+   * @var exist - will indicate if the exist in the collection
    */
     const exist:Array<Document> = await BucketModel.find({}, {limits: 1});
     if(exist.length === 0)

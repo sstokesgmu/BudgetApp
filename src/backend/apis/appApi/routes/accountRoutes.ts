@@ -9,15 +9,22 @@ const router:Router = express.Router();
  * @param {Response} 
  * @callback => will fetch all documents within the accounts collection
 */
-router.get("/", async (_:Request, res:Response) => {
-    const result = await AccountModel.find({});
+router.get("/", async (req:Request, res:Response) => {
     try {
-        console.log('Client retrieving account documents')
+        console.log('Client retrieving account documents');
+
+        //Get the fields query parameter, if provided
+        const fields = req.query.fields ? 
+                    (req.query.fields as string).split(',').join(' ') 
+                    : '';
+
+        const result = await AccountModel.find({},fields);
         res.status(200).send(result);
     } catch (error) {
         res.status(500).send(error);
     }
 });
+
 
 router.post('/', async(req:Request,res:Response) => {
     const data = req.body;
@@ -40,6 +47,30 @@ router.post('/', async(req:Request,res:Response) => {
         console.error(e);
     }
 });
+
+router.patch('update-type/:accountId', async(req:Request, res:Response) => {
+    const id:string = req.params.accountId;
+    const accountType:string = req.body.accountType;
+
+    const result = await AccountModel.updateOne({account_num: id},
+        {$set: {type:accountType}},
+        {new:true}
+    );
+    console.log(`Updating ${id}'s account type to: ${accountType}`);
+    res.status(200).send(result);
+});
+
+router.patch('update-balance/:accountId', async(req:Request, res:Response) => {
+    const id:string = req.params.accountId;
+    const balance:number = req.body.balance; 
+
+    const result = await AccountModel.updateOne({account_num: id},
+        {$set: {current_amount:balance}},
+        {new:true}
+    ).exec();
+    console.log(`Updating  ${id}'s account balance: ${balance}`);
+    res.status(200).send(result);
+})
 
 router.delete('/', async(req:Request, res:Response) => {
     const accountsArray = (req.query.account_nums as string).split(',').map(account => parseInt(account))

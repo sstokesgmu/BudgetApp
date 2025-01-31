@@ -17,13 +17,6 @@ export interface IAccount {
     bucket: ObjectId[] | null,
 }
 
-export interface ITransaction_Bucket extends Document {
-    account_id : number,
-    transaction_count: number,
-    start_date: Date,
-    end_date: Date | null,
-    transactions: ITransaction[] | null;
-}
 export interface ITransaction {
     date: Date;
     amount: number;
@@ -31,4 +24,12 @@ export interface ITransaction {
     trans_type: string;
     comp_name: string;
     status: string;
+}
+
+export interface ITransaction_Bucket extends Document {
+    account_id : number,
+    // transaction_count: number,
+    start_date: Date,
+    end_date: Date | null,
+    transactions: ITransaction[] | null;
 }
