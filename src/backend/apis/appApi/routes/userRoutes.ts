@@ -16,7 +16,8 @@ const router:Router = express.Router();
 router.get("/", async ( _:Request , res:Response) => {
     const user = await UserModel.find({});
     try {
-        res.send(user);
+        console.log("Get user request from client");
+        res.status(200).send(user);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -29,8 +30,7 @@ router.get("/", async ( _:Request , res:Response) => {
  * @callback => will queries to see if a document of model user has an accounts array of @type {number} exists
  * Then we push (add) the new account id to the array   
 */
-router.post("/create", async(req:Request, res:Response) => {
-    // const { accountType, amount} = req.body
+router.post("/create/accounts", async(req:Request, res:Response) => {
     const {account} = req.body.account;
     try {
         const ids = BudgetApp.UnpackAccountIds(account, BudgetApp.ValidateAccount(account));
@@ -39,13 +39,6 @@ router.post("/create", async(req:Request, res:Response) => {
             {$push: {ids}},
             {new:true}
         ).exec()
-        //Todo: call CreateAccount(req.body.?account)
-        // const result = await UserModel.findOneAndUpdate(
-        //     {"accounts": {$exists: true, $type: "array"}},
-        //     {$push: {"accounts": account.id}},
-        //     {new: true}
-        // ).exec()
-       // await createAccount(parseInt(accountId), accountType, amount);
         res.status(200).send("okay");
     } catch (error) {
         res.status(500).send(error);
@@ -59,28 +52,17 @@ router.post("/create", async(req:Request, res:Response) => {
  * @callback => will queries to see if a document of model user has an accounts array of @type {number} exists
  * Then we pull (remove) the an account from the array   
 */
-router.patch("/del", async(req:Request, res:Response) => {
-    try {
 
-        
+//? localhost:8080/api/uses/del?accounts=123,456,789
+router.patch("/del/accounts", async(req:Request, res:Response) => {
+    try {      
         const accountsArray = (req.query.accounts as string).split(',').map(account => parseInt(account))
-
         const result = await UserModel.updateMany(
             {"accounts": {$in:accountsArray}},
             {$pull:{"accounts": {$in:accountsArray}}}
-        ).exec()    
-
-        // await UserModel.updateMany(
-        //     {"accounts": {$in: req.params.accounts}},
-        //     {$pull: {"accounts":{ $in:req.params.accounts}}},
-        //     {
-        //         new: false,
-        //         projection: ({_id:0,name:0})
-        //     }
-        // ).exec();
-
-        
+        ).exec()            
         const res_data = BudgetApp.DeleteAccounts(req.query.accounts as string);
+        console.log(`Accounts: ${req.query.accounts} were deleted successfully`);
         res.status(200).send(result);
     } catch(error) {
         res.status(500).send(error);

@@ -2,6 +2,8 @@ import express, { Request, Response, Application} from "express";
 import dotenv from "dotenv";
 import session from "express-session";
 import path from "path";
+
+import cors from 'cors';
 import ConnectToDB from "./db.js";
 import BucketModel from "./apis/appApi/models/transactions.js";
 
@@ -31,8 +33,8 @@ const app: Application = express();
 //Parse int returns a string, we don't know if the user is going to define a port so we default the value if
 //the left side is null
 const PORT: number = parseInt(process.env.PORT ?? "4000", 10);
-
-// declare module "express-session" {
+app.use(cors());
+// declare module ["express-session" {
 //   interface SessionData {
 //     access_token?: string;
 //   }
@@ -50,35 +52,6 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 app.use(express.static(path.join(__dirname, "../shared")));
 console.log(path.join(__dirname, "../frontend"));
 console.log(path.join(__dirname, "../shared"));
-
-
-// app.post('/user-accounts/seed', async (req:Request, res:Response) => {
-//   try {
-    
-
-//   } catch(error) {
-//     console.error()
-//   }
-
-// });
-// app.get("/transactions/seed/:accountID", async (req,res) =>{
-//   try {
-//     await BucketModel.findOneAndUpdate(
-//       {"account_id" : req.params.accountID},
-//       {$pull: {"transactions": {}}},
-//     );
-
-//     const result = await BucketModel.findOneAndUpdate (
-//       {"account_id": req.params.accountID},
-//       {$push: {"transactions":transaction_seed}},
-//       {new:true}
-//     )
-//     res.status(200).send(transaction_seed);
-
-//   } catch (error) {
-//     console.log(`Something went wrong loading seed data: ${error}`)
-//   }
-//})
 
 //Adding 0.0.0.0 Makes the this interfaces on the LAN makes it on the public 
 //network
