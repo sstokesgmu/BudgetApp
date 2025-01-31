@@ -4,6 +4,7 @@ import {ObjectId} from "mongodb"
 // shared/interfaces.ts
 export interface IUser {
     name: string,
+    total: number,
     accounts: number[],
 }
 export interface IAccount {

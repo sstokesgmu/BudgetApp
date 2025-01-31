@@ -53,35 +53,6 @@ app.use(express.static(path.join(__dirname, "../shared")));
 console.log(path.join(__dirname, "../frontend"));
 console.log(path.join(__dirname, "../shared"));
 
-
-// app.post('/user-accounts/seed', async (req:Request, res:Response) => {
-//   try {
-    
-
-//   } catch(error) {
-//     console.error()
-//   }
-
-// });
-// app.get("/transactions/seed/:accountID", async (req,res) =>{
-//   try {
-//     await BucketModel.findOneAndUpdate(
-//       {"account_id" : req.params.accountID},
-//       {$pull: {"transactions": {}}},
-//     );
-
-//     const result = await BucketModel.findOneAndUpdate (
-//       {"account_id": req.params.accountID},
-//       {$push: {"transactions":transaction_seed}},
-//       {new:true}
-//     )
-//     res.status(200).send(transaction_seed);
-
-//   } catch (error) {
-//     console.log(`Something went wrong loading seed data: ${error}`)
-//   }
-//})
-
 //Adding 0.0.0.0 Makes the this interfaces on the LAN makes it on the public 
 //network
 //This is for testing 
