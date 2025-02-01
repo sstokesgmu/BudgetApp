@@ -50,16 +50,8 @@ router.get("/:accountId", async (req: Request, res: Response) => {
  */
 
 router.post("/add/:accountId", async (req: Request, res: Response) => {
-  // const transactionObj: ITransaction = {
-  //   date: new Date(Date.now()),
-  //   amount: req.body?.amount,
-  //   trans_type: req.body?.type,
-  //   comp_name: req.body?.company,
-  //   status: "pending",
-  // };
   try {
     const transaction = BudgetApp.CreateTransaction(req.body.transaction);
-
     const query = {
       account_id: req.params.accountId,
       start_date: { $lte: transaction.date },
@@ -73,46 +65,12 @@ router.post("/add/:accountId", async (req: Request, res: Response) => {
       res.status(200).send(`The response is okay: ${result}`);
     } else {
       //Create a new document
-       const bucket = new BucketModel(BudgetApp.CreateBucket(transaction, parseInt(req.params.accountId)))
-       bucket.save();
-       res.status(200).send(`The response is okay: ${bucket}`);
+      const bucket = new BucketModel(BudgetApp.CreateBucket(transaction, parseInt(req.params.accountId)))
+      bucket.save();
       //Add the document's object id to accounts array
+      BudgetApp.AddReference(req.params.accountId,"bucket", bucket._id);
+      res.status(200).send(`The response is okay: ${bucket}`);
     }
-
-    // /**
-    //  * @var exist - will indicate if the exist in the collection
-    //  */
-    // const exist: Array<Document> = await BucketModel.find({}, { limits: 1 });
-    // if (exist.length === 0) {
-    //   console.log(
-    //     "There are no documents inside of the collection, creating a  new transaction bucket"
-    //   );
-    //   const result = CreateModel(transactionObj);
-    //   result.save();
-    //   res.status(200).send(result);
-    // } else {
-    //   //We have a collection but lets think about this:
-    //   /*
-    //     1. does the account number in the data set match the account number of the transaction 
-    //     2. does the data set have a bucket that is within the time frame
-    //    */
-    //   const doesDocExist = await BucketModel.findOne({
-    //     account_id: req.params.accountId,
-    //     start_date: { $lte: transactionObj.date },
-    //     end_date: { $gte: transactionObj.date },
-    //   });
-    //   if (doesDocExist) {
-    //     const result = await doesDocExist.updateOne({
-    //       $push: { transactions: transactionObj },
-    //     });
-    //     res.status(200).send(`The response is okay: ${result}`);
-    //   } else {
-    //     //Create a new document
-    //     const result = CreateModel(transactionObj);
-    //     result.save();
-    //     res.status(200).send(result);
-    //   }
-    // }
   } catch (error) {
     console.error(error);
     res.status(500).send(error);

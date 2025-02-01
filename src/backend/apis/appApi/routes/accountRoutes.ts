@@ -1,5 +1,6 @@
 import express, {Request, Response, Router}from "express";
 import AccountModel from "../models/account.js";
+import { Types } from "mongoose";
 
 const router:Router = express.Router();
 
@@ -72,6 +73,36 @@ router.patch('/update-balance/:accountId', async(req:Request, res:Response) => {
     console.log(`Updating  ${id}'s account balance: ${balance}`);
     res.status(200).send(result);
 })
+
+router.patch('/update-bucket/:accountId', async(req:Request, res:Response) => {
+    console.log(req.body);
+    const {accountId} = req.params.accountId;
+    const {prop,value} = req.body;
+
+    const id =  new Types.ObjectId(value as string);
+
+    console.log(prop,value);
+    console.log(accountId)
+    const result = await AccountModel.updateOne(
+        { account_num: accountId },
+        [
+          {
+            $set: {
+              [`${prop}`]: { $ifNull: [`$${prop}`, []] } // Ensure `bucket` is an array if null
+            },
+          },
+          {  
+    
+                $addToSet: { [`${prop}`]: id }
+          }
+        ],
+        { new: true }
+      );
+      
+    console.log(result);
+    console.log("Added the data")
+    res.status(200).send("Updated Accout");
+});
 
 router.delete('/', async(req:Request, res:Response) => {
     const accountsArray = (req.query.account_nums as string).split(',').map(account => parseInt(account))

@@ -137,22 +137,35 @@ export namespace BudgetApp {
     let response = await fetch(`http://localhost:${process.env.PORT}/api/accounts?account_nums=${values}`,
       {
         method:"DELETE",
-        headers: {
-          "Content-Type":"application/json",
-        }
+        headers: {"Content-Type":"application/json",}
       }
     );
     console.log(`b is:${JSON.stringify(response)}`)
     return response;
   }
 
+  export async function AddReference(urlParam:string,propertyName:string,propValue:any){
+    console.log(urlParam,propertyName,propValue);
+    const data ={
+      prop:propertyName,
+      value:propValue      
+    }
+    let response = await fetch(`http://localhost:${process.env.PORT}/api/accounts/update-bucket/${urlParam}`,
+      {
+        method:"PATCH",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify(data)
+      },
+    );
+    return response;
+  }
+
   export function CreateTransaction(obj:any):ITransaction{
-    console.log(obj);
     const transaction:ITransaction = {
       date: new Date(Date.now()),
       amount: obj.amount,
-      trans_type: obj.trans_type,
-      comp_name:obj.comp_name,
+      trans_type: obj.type,
+      comp_name:obj.company,
       status: 'pending'
     }
     return transaction
