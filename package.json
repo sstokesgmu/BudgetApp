@@ -5,10 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon dist/backend/server.js",
-    "dev": "ts-node src/server.ts",
-    "build": "tsc --project tsconfig.json",
-    "build:backend": "tsc --project tsconfig.backend.json"
+    "start": "node dist/server.js",
+    "dev": "nodemon dist/server.js",
+    "build": "tsc --project tsconfig.json"
   },
   "keywords": [],
   "author": "",
