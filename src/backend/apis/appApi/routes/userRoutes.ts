@@ -1,9 +1,7 @@
 import express, { Request, Response, Router } from "express";
-import express, { Request, Response, Router } from "express";
 import UserModel from "../models/user.js";
 import { IAccount } from "../../../tools/budget.js";
 import AccountModel from "../models/account.js";
-import { BudgetApp } from "../../../tools/budgetMe.js";
 import { BudgetApp } from "../../../tools/budgetMe.js";
 
 //create mini app
@@ -15,15 +13,6 @@ const router: Router = express.Router();
  * @param {Request}
  * @param {Response}
  * @callback => will fetch all documents within the user collection
- */
-router.get("/", async (_: Request, res: Response) => {
-  const user = await UserModel.find({});
-  try {
-    console.log("Get user request from client");
-    res.status(200).send(user);
-  } catch (error) {
-    res.status(500).send(error);
-  }
  */
 router.get("/", async (_: Request, res: Response) => {
   const user = await UserModel.find({});
@@ -75,7 +64,7 @@ router.patch("/create/accounts", async (req: Request, res: Response) => {
  * @callback => will queries to see if a document of model user has an accounts array of @type {number} exists
  * Then we pull (remove) the an account from the array
  */
-33;
+
 //? localhost:8080/api/uses/del?accounts=123,456,789
 router.patch("/del/accounts", async (req: Request, res: Response) => {
   try {
