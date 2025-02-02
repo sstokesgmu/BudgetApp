@@ -75,31 +75,20 @@ router.patch('/update-balance/:accountId', async(req:Request, res:Response) => {
 })
 
 router.patch('/update-bucket/:accountId', async(req:Request, res:Response) => {
-    console.log(req.body);
-    const {accountId} = req.params.accountId;
+    console.log("Hello");
+    const accountId = req.params.accountId;
     const {prop,value} = req.body;
-
     const id =  new Types.ObjectId(value as string);
-
-    console.log(prop,value);
-    console.log(accountId)
-    const result = await AccountModel.updateOne(
-        { account_num: accountId },
-        [
-          {
-            $set: {
-              [`${prop}`]: { $ifNull: [`$${prop}`, []] } // Ensure `bucket` is an array if null
-            },
-          },
-          {  
+    console.log(`$${prop}`);
     
-                $addToSet: { [`${prop}`]: id }
-          }
+    console.log(accountId);
+
+    const result = await AccountModel.updateOne({account_num: accountId},
+        [
+            {$set: {[prop] : {$ifNull: [`$${prop}`,[id] ]}}},
         ],
-        { new: true }
-      );
-      
-    console.log(result);
+        {new:true} 
+    )
     console.log("Added the data")
     res.status(200).send("Updated Accout");
 });
