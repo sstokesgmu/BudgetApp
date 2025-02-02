@@ -1,10 +1,7 @@
 import express, { Request, Response } from "express";
 import { Types } from "mongoose";
 import BucketModel from "../models/transactions.js";
-import {
-  ITransaction,
-  ITransaction_Bucket,
-} from "../../../shared/interfaces/budget.js";
+import { ITransaction, ITransaction_Bucket } from "../../../tools/budget.js";
 import { BudgetApp } from "../../../tools/budgetMe.js";
 
 const router: any = express.Router();
@@ -61,14 +58,16 @@ router.post("/add/:accountId", async (req: Request, res: Response) => {
     //Update bucket with the new transaction information
     if (doc) {
       console.log(doc._id);
-      const result = await BudgetApp.UpdateBucket(transaction,doc._id, "push");
+      const result = await BudgetApp.UpdateBucket(transaction, doc._id, "push");
       res.status(200).send(`The response is okay: ${result}`);
     } else {
       //Create a new document
-      const bucket = new BucketModel(BudgetApp.CreateBucket(transaction, parseInt(req.params.accountId)))
+      const bucket = new BucketModel(
+        BudgetApp.CreateBucket(transaction, parseInt(req.params.accountId))
+      );
       bucket.save();
       //Add the document's object id to accounts array
-      BudgetApp.AddReference(req.params.accountId,"bucket", bucket._id);
+      BudgetApp.AddReference(req.params.accountId, "bucket", bucket._id);
       res.status(200).send(`The response is okay: ${bucket}`);
     }
   } catch (error) {
@@ -80,8 +79,9 @@ router.post("/add/:accountId", async (req: Request, res: Response) => {
 router.patch("/push/:id", async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
-    const result = await BucketModel.findByIdAndUpdate(id,
-      { $push: { transactions: req.body} },
+    const result = await BucketModel.findByIdAndUpdate(
+      id,
+      { $push: { transactions: req.body } },
       { new: true }
     ).exec();
     res.status(200).send(result);
@@ -96,7 +96,7 @@ router.patch("/pull/:id", async (req: Request, res: Response) => {
     console.log(req.body);
     const result: any = await BucketModel.findByIdAndUpdate(
       id,
-      { $pull: {transactions:req.body}},
+      { $pull: { transactions: req.body } },
       { new: true }
     ).exec();
     if (!result) throw new Error("This is not the right bucket");
@@ -107,63 +107,15 @@ router.patch("/pull/:id", async (req: Request, res: Response) => {
   }
 });
 
-router.delete("/del", async(req:Request, res:Response) => {
+router.delete("/del", async (req: Request, res: Response) => {
   try {
-        const objIdArray = (req.query.account_nums as string).split(',').map(ids => new Types.ObjectId(ids))
-        const result = BucketModel.deleteMany({_id: {$in: objIdArray}});
-        res.status(200).send(result);
-  } catch(e) {
+    const objIdArray = (req.query.account_nums as string)
+      .split(",")
+      .map((ids) => new Types.ObjectId(ids));
+    const result = BucketModel.deleteMany({ _id: { $in: objIdArray } });
+    res.status(200).send(result);
+  } catch (e) {
     console.error(e);
   }
-})
-
-/**
-//  * @param startDate
-//  * @returns a new date 14 days after the start date
-//  */
-// function CreateEndDate(startDate: Date): Date {
-//   let date = new Date(startDate);
-//   date.setDate(date.getDay() + 14);
-//   return date;
-//}
-
-// /**
-//  * @param transaction
-//  * @param trans_bucket
-//  * @returns a new compiled Bucket model where the first element of the transaction array is the transaction
-//  * passed in the request.
-//  */
-// function CreateModel(
-//   transaction?: ITransaction,
-//   trans_bucket?: ITransaction_Bucket
-// ): any {
-//   try {
-//     let bucket: ITransaction_Bucket;
-//     if (trans_bucket) {
-//       //Create the Transaction bucket with a new bucket.
-//       bucket = trans_bucket;
-//     } else if (transaction) {
-//       //Create the transaction bucket with the first transaction
-//       let array: ITransaction[] = [transaction];
-//       bucket = new BucketModel({
-//         account_id: transaction.account,
-//         transaction_count: 1,
-//         start_date: transaction.date,
-//         end_date: CreateEndDate(transaction.date),
-//         transactions: array,
-//       });
-//     } else {
-//       throw new Error("Either transaction of trans_bucket must be provided");
-//     }
-//     return bucket;
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
+});
 export default router;
-
-// router.post("/create/bucket", async (req: Request, res:Response) => {
-//     const result = CreateModel(undefined, req.body.data);
-//     result.save()
-//     res.send(`Created a new bucket ${result}`);
-// })

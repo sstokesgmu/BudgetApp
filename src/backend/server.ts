@@ -57,7 +57,7 @@ console.log(path.join(__dirname, "../shared"));
 //Adding 0.0.0.0 Makes the this interfaces on the LAN makes it on the public 
 //network
 //This is for testing 
-app.listen(PORT,'0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`Server location: ${__dirname}`);
   console.log(`Server is running at http://localhost:${PORT}`);
 });
