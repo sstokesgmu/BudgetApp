@@ -15,6 +15,7 @@ const router: Router = express.Router();
  * @callback => will fetch all documents within the user collection
  */
 router.get("/", async (_: Request, res: Response) => {
+  console.log("hello");
   const user = await UserModel.find({});
   try {
     console.log("Get user request from client");
