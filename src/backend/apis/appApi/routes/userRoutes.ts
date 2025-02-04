@@ -1,35 +1,26 @@
 import express, { Request, Response, Router } from "express";
 import UserModel from "../models/user.js";
-import { IAccount } from "../../../tools/budget.js";
-import AccountModel from "../models/account.js";
 import { BudgetApp } from "../../../tools/budgetMe.js";
 
-//create mini app
 const router: Router = express.Router();
+
 /**
- * @param {string} - / refers to the root
- * @param {Request}
- * @param {Response}
  * @param {Request}
  * @param {Response}
  * @callback => will fetch all documents within the user collection
  */
-router.get("/", async (_: Request, res: Response) => {
-  console.log("hello");
-  const user = await UserModel.find({});
+router.get("/", async (_:Request, res:Response) => {
   try {
-    console.log("Get user request from client");
+    const user = await UserModel.find({});
+    console.log(`GET request form root endpoint. Retrieved ${user.length} users`);
     res.status(200).send(user);
   } catch (error) {
+    console.error("Error fetching data from users:", (error as Error).message);
     res.status(500).send(error);
   }
 });
 
 /**
-/**
- * @param {string} - / refers to the endpoint
- * @param {Request}
- * @param {Response}
  * @param {Request}
  * @param {Response}
  * @callback => will queries to see if a document of model user has an accounts array of @type {number} exists
@@ -37,7 +28,6 @@ router.get("/", async (_: Request, res: Response) => {
  */
 router.patch("/create/accounts", async (req: Request, res: Response) => {
   const account = req.body.account;
-  console.log(account);
   try {
     const ids = await BudgetApp.UnpackAccountIds(
       account,
