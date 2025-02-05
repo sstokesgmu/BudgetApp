@@ -7,7 +7,7 @@
 -  Manage different account balances 
 
 
-**The app was deployed by: ** 
+Frontend: https://github.com/sstokesgmu/Budget-Me-App.git
 
 ## TODO
 ---
