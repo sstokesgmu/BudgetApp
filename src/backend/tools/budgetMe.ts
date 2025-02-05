@@ -51,6 +51,7 @@ export namespace BudgetApp {
     switch (code) {
       case 0: //Single Number
         account = CreateAccount({ account_num: params } as IAccount);
+        account.current_amount = account.starting_amount;
         await CreateAccounts(
           `http://localhost:${process.env.PORT}/api/accounts`,
           account
@@ -68,7 +69,12 @@ export namespace BudgetApp {
         const accounts = (params as number[]).map(
           (id) => ({ account_num: id } as IAccount)
         );
-        account = accounts.map((account) => CreateAccount(account));
+        account = accounts.map((account) => {
+          
+          account = CreateAccount(account);
+          account.current_amount = account.starting_amount;
+          return account;
+        });
         await CreateAccounts(
           `http://localhost:${process.env.PORT}/api/accounts`,
           account

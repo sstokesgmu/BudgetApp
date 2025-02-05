@@ -12,14 +12,13 @@ const router:Router = express.Router();
 */
 router.get("/", async (req:Request, res:Response) => {
     try {
-        console.log('Client retrieving account documents');
-
+        console.log('Client retrieving account information');
+        const number = req.query.id ? req.query.id : null;
+        const query = number ? {account_num:number}:{}; 
         //Get the fields query parameter, if provided
-        const fields = req.query.fields ? 
-                    (req.query.fields as string).split(',').join(' ') 
+        const fields = req.query.fields ? (req.query.fields as string).split(',').join(' ') 
                     : '';
-
-        const result = await AccountModel.find({},fields);
+        const result = await AccountModel.find(query,fields);
         res.status(200).send(result);
     } catch (error) {
         res.status(500).send(error);
@@ -52,7 +51,8 @@ router.post('/', async(req:Request,res:Response) => {
 
 router.patch('/update-type/:accountId', async(req:Request, res:Response) => {
     const id:string = req.params.accountId;
-    const accountType:string = req.body.accountType;
+    console.log(req.body);
+    const accountType:string = req.body.type;
 
     const result = await AccountModel.updateOne({account_num: id},
         {$set: {type:accountType}},
@@ -75,7 +75,6 @@ router.patch('/update-balance/:accountId', async(req:Request, res:Response) => {
 })
 
 router.patch('/update-bucket/:accountId', async(req:Request, res:Response) => {
-    console.log("Hello");
     const accountId = req.params.accountId;
     const {prop,value} = req.body;
     const id =  new Types.ObjectId(value as string);

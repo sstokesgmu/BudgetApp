@@ -9,9 +9,13 @@ const router: Router = express.Router();
  * @param {Response}
  * @callback => will fetch all documents within the user collection
  */
-router.get("/", async (_:Request, res:Response) => {
+router.get("/", async (req:Request, res:Response) => {
   try {
-    const user = await UserModel.find({});
+
+
+    const fields = req.query.fields ? (req.query.fields as string).split(",").join(" ") 
+    : "";
+    const user = await UserModel.find({},fields);
     console.log(`GET request form root endpoint. Retrieved ${user.length} users`);
     res.status(200).send(user);
   } catch (error) {
