@@ -39,9 +39,12 @@ router.get("/:accountId", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/", async (_: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
-    const result = await BucketModel.find({});
+    const fields = req.query.fields
+      ? (req.query.fields as string).split(",").join(" ")
+      : "";
+    const result = await BucketModel.find({}, fields);
     res.status(200).send(result);
   } catch (e) {
     res.status(500).send(e);
