@@ -39,6 +39,15 @@ router.get("/:accountId", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/", async (_: Request, res: Response) => {
+  try {
+    const result = await BucketModel.find({});
+    res.status(200).send(result);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
 /**
  * @param {string} - route endpoint
  * @param {Request}
@@ -63,7 +72,7 @@ router.post("/add/:accountId", async (req: Request, res: Response) => {
     } else {
       //Create a new document
       const bucket = new BucketModel(
-        BudgetApp.CreateBucket(transaction, parseInt(req.params.accountId))
+        BudgetApp.CreateBucket(transaction, parseInt(req.params.accountId)),
       );
       bucket.save();
       //Add the document's object id to accounts array
@@ -82,7 +91,7 @@ router.patch("/push/:id", async (req: Request, res: Response) => {
     const result = await BucketModel.findByIdAndUpdate(
       id,
       { $push: { transactions: req.body } },
-      { new: true }
+      { new: true },
     ).exec();
     res.status(200).send(result);
   } catch (e) {
@@ -97,7 +106,7 @@ router.patch("/pull/:id", async (req: Request, res: Response) => {
     const result: any = await BucketModel.findByIdAndUpdate(
       id,
       { $pull: { transactions: req.body } },
-      { new: true }
+      { new: true },
     ).exec();
     if (!result) throw new Error("This is not the right bucket");
     res.status(200).send(result);
@@ -118,4 +127,5 @@ router.delete("/del", async (req: Request, res: Response) => {
     console.error(e);
   }
 });
+
 export default router;
