@@ -47,8 +47,15 @@ PORT=8080;
 npm run build
 ```
 
+5. Start the server; it runs on port `8080` for now  
 
-| **Route** | **Method** | **Description** | **Full Route Example** | **Request Body** | **Response Example** |
+```bash
+npm start
+```
+
+## Quick Start API Reference:
+
+| **Route** | **Method** | **Description** | **Full Route Example** | **Request Body Example** | **Response Example** |
 |-----------|------------|-----------------|------------------------|-------------------|----------------------|
 | **Seed Route** | `GET` | Adds transaction data to a particular account | `http://localhost:port/transactions/seed/:accountID` | N/A | N/A |
 | **User Routes** | `GET` | Fetches all user documents with name, accounts, and total | `https://budgetapp-vdsp.onrender.com/api/users` | N/A | `[ { "_id": "679f7d1a1e60cbf987a78c11", "accounts": [333,222], "name": "John Doe" } ]` |
@@ -62,10 +69,3 @@ npm run build
 | **Transaction Routes** | `GET` | Retrieves transactions for a specific account | `http://localhost:port/api/transactions/123` | N/A | `[ { "date": "", "amount": 30232, "trans_type": "withdrawl", "comp_name": "Costco", "status": "pending" } ]` |
 | **Transaction Add** | `POST` | Adds a transaction to a transaction bucket | `http://localhost:port/api/transactions/add/123` | `{ "date": "", "amount": 30232, "trans_type": "withdrawl", "comp_name": "Costco", "status": "pending", "account": 123 }` | N/A |
 | **Transaction Delete** | `PATCH` | Removes a transaction from a transaction bucket | `http://localhost:8080/api/transactions/del/123` | N/A | N/A |
-
-
-5. Start the server; it runs on port `8080` for now  
-
-```bash
-npm start
-```
