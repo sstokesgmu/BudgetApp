@@ -67,5 +67,5 @@ npm start
 | **Account Update Type** | `PATCH` | Updates account type | `https://budgetapp-vdsp.onrender.com/api/accounts/update-type/:accountId` | `{ "type": "Checking" }` | `{ "acknowledged": true, "modifiedCount": 1, "matchedCount": 1 }` |
 | **Account Update Balance** | `PATCH` | Updates account balance | `https://budgetapp-vdsp.onrender.com/api/accounts/update-balance/:accountId` | `{ "balance": 4000 }` | `{ "acknowledged": true, "modifiedCount": 1, "matchedCount": 1 }` |
 | **Transaction Routes** | `GET` | Retrieves transactions for a specific account | `http://localhost:port/api/transactions/123` | N/A | `[ { "date": "", "amount": 30232, "trans_type": "withdrawl", "comp_name": "Costco", "status": "pending" } ]` |
-| **Transaction Add** | `POST` | Adds a transaction to a transaction bucket | `http://localhost:port/api/transactions/add/123` | `{ "date": "", "amount": 30232, "trans_type": "withdrawl", "comp_name": "Costco", "status": "pending", "account": 123 }` | N/A |
+| **Transaction Add** | `POST` | Adds a transaction to a transaction bucket | `http://localhost:port/api/transactions/add/123` | `{ "amount": 30232, "trans_type": "withdrawl", "comp_name": "Costco",  "account": 123 }` | N/A |
 | **Transaction Delete** | `PATCH` | Removes a transaction from a transaction bucket | `http://localhost:8080/api/transactions/del/123` | N/A | N/A |
