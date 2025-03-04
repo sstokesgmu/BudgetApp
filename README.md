@@ -52,14 +52,3 @@ npm run build
 ```bash
 npm start
 ```
-
-
-
-
-
-## Reflection:
-
-What could you have done differently during the planning stages of your project to make the execution easier? **Rely more on Postman it is awesome**
-
-
-What would you add to, or change about your application if given more time? **Validation and more support for edge cases. The code needs support for handling multiple transaction buckets**
